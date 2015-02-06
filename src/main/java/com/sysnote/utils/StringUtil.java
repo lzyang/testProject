@@ -3,6 +3,7 @@ package com.sysnote.utils;
 import com.mongodb.BasicDBObject;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -77,5 +78,39 @@ public class StringUtil {
         }catch(Exception e){
             return "";
         }
+    }
+
+    /**
+     * 获取请求地址
+     * @param request
+     * @return
+     */
+    public static String getRemoteIP(HttpServletRequest request) {
+        Integer NginxIP = 0;
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("http_client_ip");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (ip != null) {
+            if (ip.indexOf(",") != -1) {
+                String[] values = ip.split("\\,");
+                ip = values[(NginxIP).intValue()].trim();
+            } else if (ip.indexOf(":") != -1) {
+                ip = "127.0.0.1";
+            }
+        }
+        return ip;
     }
 }
