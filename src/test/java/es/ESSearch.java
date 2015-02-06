@@ -25,6 +25,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.nlpcn.commons.lang.util.StringUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static org.elasticsearch.search.aggregations.AggregationBuilders.*;
@@ -143,7 +145,29 @@ public class ESSearch {
     @Test
     public void testNormal() {
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        System.out.println(sdf.format(new Date(1421656393361l)));
-        Stringutils
+//        System.out.println(sdf.format(new Date(1422460740000l)));
+//        System.out.println(sdf.format(new Date(1391097540000l)));
+        System.out.println("0:".split(":")[0]);
     }
+
+    @Test
+    public void testTimeout(){
+        String indexName = "product_local";
+        String indexType = "productType";
+        String clusterName = "lzyESTest";
+
+        Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, clusterName);
+
+        SearchRequestBuilder  builder= client.prepareSearch("product_local")
+                .setTimeout("10ms")
+//                .setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), FilterBuilders.scriptFilter("Thread.sleep(5000); return true;")));
+                .setQuery(QueryBuilders.matchAllQuery());
+        System.out.println(builder.toString());
+        SearchResponse searchResponse = builder.execute().actionGet();
+
+        System.out.println(searchResponse.getTookInMillis());
+        System.out.println(searchResponse.isTimedOut());
+    }
+
+
 }
