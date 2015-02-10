@@ -13,9 +13,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
-/**
- * Created by root on 15-2-10.
- */
 public class HttpClientTest {
 
 
