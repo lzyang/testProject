@@ -37,13 +37,13 @@ public class LdapUrl {
 
         CloseableHttpResponse resp = null;
         //10.58.11.4:9001
-        CredentialsProvider credsProvider = new BasicCredentialsProvider();
-        credsProvider.setCredentials(
-                new AuthScope("10.58.11.4", 9001),
-                new UsernamePasswordCredentials("atguser","atg@2012"));
-
-        HttpClientContext context = HttpClientContext.create();
-        context.setCredentialsProvider(credsProvider);
+//        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+//        credsProvider.setCredentials(
+//                new AuthScope("10.58.11.4", 9001),
+//                new UsernamePasswordCredentials("atguser","atg@2012"));
+//
+//        HttpClientContext context = HttpClientContext.create();
+//        context.setCredentialsProvider(credsProvider);
 
         post.addHeader("Content-Type","applcation/json");
         post.addHeader("Authorization","YXRndXNlcjphdGdAMjAxMg==");
@@ -67,11 +67,7 @@ public class LdapUrl {
         }
         if(status == 200)
         {
-            System.out.println("login successful!");
-            //do your business things
-        } else
-        {
-            System.out.println("Login failed!  Please check your userName and Password!");
+            System.out.println("status code:"+200);
         }
     }
 
