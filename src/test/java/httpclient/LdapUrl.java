@@ -45,7 +45,7 @@ public class LdapUrl {
 //        HttpClientContext context = HttpClientContext.create();
 //        context.setCredentialsProvider(credsProvider);
 
-        post.addHeader("Content-Type","applcation/json");
+        post.addHeader("Content-Type","application/json");
         post.addHeader("Authorization","YXRndXNlcjphdGdAMjAxMg==");
 
         BasicDBObject obj = new BasicDBObject().append("itemFlag","N").append("partNum","1000407978");
@@ -53,7 +53,7 @@ public class LdapUrl {
         StringEntity entity = new StringEntity(obj.toString(),"utf-8");
 
         entity.setContentEncoding("UTF-8");
-        entity.setContentType("applcation/json");
+        entity.setContentType("application/json");
         post.setEntity(entity);
 
         int status = 0;
