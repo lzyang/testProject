@@ -28,7 +28,7 @@ public class MyTest {
     @Test
     public void convTime(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println(sdf.format(new Date(1427359588502l)));//1423106324413
+        System.out.println(sdf.format(new Date(1420533755673l)));//1423106324413
         System.out.println(sdf.format(new Date(1426238370913l)));//1423106324413
 
         try {

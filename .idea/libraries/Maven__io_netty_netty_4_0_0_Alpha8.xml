@@ -3,9 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../../apache-maven-3.2.5/.m2/repository/io/netty/netty/4.0.0.Alpha8/netty-4.0.0.Alpha8.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="jar://$PROJECT_DIR$/../../apache-maven-3.2.5/.m2/repository/io/netty/netty/4.0.0.Alpha8/netty-4.0.0.Alpha8-javadoc.jar!/" />
-    </JAVADOC>
+    <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../../apache-maven-3.2.5/.m2/repository/io/netty/netty/4.0.0.Alpha8/netty-4.0.0.Alpha8-sources.jar!/" />
     </SOURCES>
