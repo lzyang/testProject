@@ -119,7 +119,7 @@ public class ESSearch {
         String sql = "title:手机 AND productTag:1";
         srb.setQuery(QueryBuilders.filteredQuery(QueryBuilders.queryString(sql), andFilterBuilder));
 
-        System.out.println(srb);
+//        System.out.println(srb);
 
         SearchResponse response = srb.get();
 
