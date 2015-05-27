@@ -80,5 +80,10 @@
             <artifactId>netty-all</artifactId>
             <version>4.0.0.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.storm</groupId>
+            <artifactId>storm</artifactId>
+            <version>0.9.4</version>
+        </dependency>
     </dependencies>
 </project>
