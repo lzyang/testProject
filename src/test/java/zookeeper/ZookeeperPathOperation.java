@@ -15,7 +15,7 @@ import java.util.List;
 public class ZookeeperPathOperation {
 
     public CuratorFramework create() {
-        String zkServers = "10.58.50.103:19750,10.58.50.104:19750";
+        String zkServers = "10.58.47.139:19750";
         RetryNTimes retryNTimes = new RetryNTimes(5, 3000);
         CuratorFramework client = CuratorFrameworkFactory.builder()
                 .connectString(zkServers)
