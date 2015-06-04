@@ -3,7 +3,11 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../../apache-maven-3.2.5/.m2/repository/org/nlpcn/nlp-lang/0.2/nlp-lang-0.2.jar!/" />
     </CLASSES>
-    <JAVADOC />
-    <SOURCES />
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../apache-maven-3.2.5/.m2/repository/org/nlpcn/nlp-lang/0.2/nlp-lang-0.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../apache-maven-3.2.5/.m2/repository/org/nlpcn/nlp-lang/0.2/nlp-lang-0.2-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

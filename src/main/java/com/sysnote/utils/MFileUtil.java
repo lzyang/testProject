@@ -55,6 +55,8 @@ public class MFileUtil {
                 }
                 content = content + line;
             }
+            br.close();
+            reader.close();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
