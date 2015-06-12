@@ -113,4 +113,12 @@ public class StringUtil {
         }
         return ip;
     }
+
+    public static String toString(byte[] bytes) {
+        try {
+            return new String(bytes, "utf-8");
+        } catch (Exception e) {
+            return new String(bytes);
+        }
+    }
 }
