@@ -9,6 +9,8 @@ import org.apache.curator.retry.RetryNTimes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * Created by root on 15-6-12.
  */
@@ -57,6 +59,40 @@ public class ZooUtil {
             }
         } catch (Exception e) {
             logger.error("getData", e);
+            return null;
+        }
+    }
+
+    public static boolean exists(CuratorFramework client, String path, CuratorWatcher watcher) {
+        try {
+            if (watcher != null) {
+                return client.checkExists().usingWatcher(watcher).forPath(path) != null;
+            } else {
+                return client.checkExists().forPath(path) != null;
+            }
+        } catch (Exception e) {
+            logger.error("exists", e);
+            return false;
+        }
+    }
+
+    public static boolean exists(CuratorFramework client, String path) {
+        return exists(client, path, null);
+    }
+
+    public static List<String> getChilds(CuratorFramework client, String path) {
+        return getChilds(client, path, null);
+    }
+
+    public static List<String> getChilds(CuratorFramework client, String path, CuratorWatcher watcher) {
+        try {
+            if (watcher != null) {
+                return client.getChildren().usingWatcher(watcher).forPath(path);
+            } else {
+                return client.getChildren().forPath(path);
+            }
+        } catch (Exception e) {
+            logger.error("getChilds", e);
             return null;
         }
     }

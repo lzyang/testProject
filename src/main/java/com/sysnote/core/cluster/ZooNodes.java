@@ -5,6 +5,8 @@ import com.mongodb.BasicDBObject;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -17,7 +19,7 @@ public class ZooNodes {
     private HashMap<String, BasicDBList> recordsByTag = new HashMap<String, BasicDBList>();  //以Tag为key的节点数据集合
     private HashSet<String> tags = new HashSet<String>();
     private ConcurrentHashMap<String, AtomicLong> counter = new ConcurrentHashMap<String, AtomicLong>();
-
+    private HashMap<String, BasicDBList> recordsBy = new HashMap<String, BasicDBList>();
 
     /**
      * @param record zookeeper 节点Data数据
@@ -71,5 +73,32 @@ public class ZooNodes {
 
     public synchronized BasicDBObject byId(String id) {
         return recordsById.get(id);
+    }
+
+
+    public synchronized boolean remove(String id) {
+        recordsById.remove(id);
+        int index = this.findIndex(id, records);
+        boolean tag = index != -1;
+        BasicDBObject record = null;
+        if (tag) {
+            record = (BasicDBObject) records.remove(index);
+        }
+        for (Iterator<Map.Entry<String, BasicDBList>> i = recordsByTag.entrySet().iterator(); i.hasNext();) {
+            Map.Entry<String, BasicDBList> entry = i.next();
+            BasicDBList items = entry.getValue();
+            index = this.findIndex(id, items);
+            if (index != -1) {
+                items.remove(index);
+            }
+            if (items.size() == 0) {
+                tags.remove(entry.getKey());
+            }
+        }
+        return tag;
+    }
+
+    public synchronized BasicDBList records() {
+        return this.records;
     }
 }

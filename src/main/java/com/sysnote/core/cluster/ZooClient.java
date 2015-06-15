@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Morningsun on 15-6-12.
@@ -73,5 +74,16 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
 
     public String getData(String path) throws Exception {
         return ZooUtil.getData(framework, path, this);
+    }
+
+    public boolean exists(String path){
+        return ZooUtil.exists(framework,path,this);
+    }
+
+    public List<String> getChildrens(String path) throws Exception {
+        if (ZooUtil.exists(framework, path, this) == false) {
+            return null;
+        }
+        return ZooUtil.getChilds(framework, path, this);
     }
 }
