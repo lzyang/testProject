@@ -133,4 +133,12 @@ public class ZooWatcher implements Watcher {
             watchers.get(i).zooNodeChange(type, action, id, ip);
         }
     }
+
+    public void addWather(ZooKeeperWatchIntf watcher) {
+        watchers.add(watcher);
+    }
+
+    public void removeWatcher(ZooKeeperWatchIntf watcher) {
+        watchers.remove(watcher);
+    }
 }
