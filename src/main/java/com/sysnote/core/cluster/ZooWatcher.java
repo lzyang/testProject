@@ -83,7 +83,7 @@ public class ZooWatcher implements Watcher {
             BasicDBObject record = (BasicDBObject) JSON.parse(c);
             nodes.add(record);
         } catch (Exception e) {
-            logger.error("ServerNodeListener", e);
+            logger.error("ZooWatcher", e);
         }
     }
 
