@@ -40,6 +40,10 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
         }
     }
 
+    public void add(ZooWatcher watcher) {
+        watchers.add(watcher);
+    }
+
     //implements CuratorWatcher
     @Override
     public void process(WatchedEvent event) throws Exception {
