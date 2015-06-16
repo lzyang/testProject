@@ -37,9 +37,9 @@ public class ClusterDic {
             return false;
         }
 
-        appWatcher = new ZooWatcher(NodeType.app, "/appservers", zooClient);
-        zooClient.add(appListener);
-        appListener.reload();
+        appWatcher = new ZooWatcher(NodeType.app, "/nodes", zooClient);
+        zooClient.add(appWatcher);
+        appWatcher.reload();
 
         logger.info("ClusterDict init success.");
         return true;
