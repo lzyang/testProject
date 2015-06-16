@@ -17,7 +17,7 @@ import java.util.List;
 public class ZookeeperPathOperation {
 
     public CuratorFramework create() {
-        String zkServers = "10.58.47.139:19750";
+        String zkServers = "127.0.0.1:51111";
         RetryNTimes retryNTimes = new RetryNTimes(5, 3000);
         CuratorFramework client = CuratorFrameworkFactory.builder()
                 .connectString(zkServers)
@@ -126,6 +126,22 @@ public class ZookeeperPathOperation {
                 client.setData().forPath(path,data.getBytes("utf-8"));
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void deleteTest(){
+        CuratorFramework client = create();
+        client.start();
+        deletePath(client, "/root");
+        client.close();
+    }
+
+    private void deletePath(CuratorFramework client,String path){
+        try {
+            client.delete().guaranteed().forPath(path);
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
