@@ -1,4 +1,4 @@
-package com.sysnote.core.cluster;
+package com.sysnote.core.cluster.zoo;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
@@ -8,8 +8,8 @@ import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.sysnote.core.cluster.ClusterDic.NodeAction;
-import com.sysnote.core.cluster.ClusterDic.NodeType;
+import com.sysnote.core.cluster.zoo.ClusterDic.NodeAction;
+import com.sysnote.core.cluster.zoo.ClusterDic.NodeType;
 
 import org.apache.zookeeper.Watcher.Event.EventType;
 

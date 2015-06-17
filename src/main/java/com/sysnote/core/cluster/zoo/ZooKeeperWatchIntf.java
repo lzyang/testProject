@@ -1,7 +1,7 @@
-package com.sysnote.core.cluster;
+package com.sysnote.core.cluster.zoo;
 
-import com.sysnote.core.cluster.ClusterDic.NodeAction;
-import com.sysnote.core.cluster.ClusterDic.NodeType;
+import com.sysnote.core.cluster.zoo.ClusterDic.NodeAction;
+import com.sysnote.core.cluster.zoo.ClusterDic.NodeType;
 /**
  * Created by Morningsun(515190653@qq.com) on 15-6-15.
  */

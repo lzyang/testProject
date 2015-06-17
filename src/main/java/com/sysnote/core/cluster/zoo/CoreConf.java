@@ -1,4 +1,4 @@
-package com.sysnote.core.cluster;
+package com.sysnote.core.cluster.zoo;
 
 /**
  * Created by root on 15-6-12.

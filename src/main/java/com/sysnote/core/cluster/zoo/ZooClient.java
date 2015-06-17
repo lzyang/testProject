@@ -1,4 +1,4 @@
-package com.sysnote.core.cluster;
+package com.sysnote.core.cluster.zoo;
 
 import com.sysnote.utils.ZooUtil;
 import org.apache.curator.framework.CuratorFramework;
