@@ -121,4 +121,12 @@ public class StringUtil {
             return new String(bytes);
         }
     }
+
+    public static byte[] toBytes(String content) {
+        try {
+            return content.getBytes("utf-8");
+        } catch (Exception e) {
+            return content.getBytes();
+        }
+    }
 }

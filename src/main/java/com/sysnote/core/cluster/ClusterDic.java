@@ -1,5 +1,6 @@
 package com.sysnote.core.cluster;
 
+import com.mongodb.BasicDBList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,7 @@ public class ClusterDic {
 
     public static ClusterDic self = null;
     private static Logger logger = LoggerFactory.getLogger(ClusterDic.class);
-    private ZooClient zooClient = null;
+    public ZooClient zooClient = null;
     public ZooWatcher appWatcher = null;
 
     static {
@@ -31,17 +32,22 @@ public class ClusterDic {
 
     private boolean init() {
         logger.info("ClusterDict init start...");
-        ZooClient zooClient = new ZooClient();
+        zooClient = new ZooClient();
 
-        if(zooClient.init()){
+        if(!zooClient.init()){
             return false;
         }
 
-        appWatcher = new ZooWatcher(NodeType.app, "/nodes", zooClient);
+        appWatcher = new ZooWatcher(NodeType.app, CoreConf.appNodesPrefix, zooClient);
         zooClient.add(appWatcher);
         appWatcher.reload();
 
         logger.info("ClusterDict init success.");
         return true;
+    }
+
+
+    public BasicDBList appNodes(){
+        return appWatcher.nodes.records();
     }
 }

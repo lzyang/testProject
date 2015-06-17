@@ -39,6 +39,7 @@ public class ZooWatcher implements Watcher {
         if (event == null) {
             return;
         }
+        System.out.println("event.toString()>>>"+event.toString() +" path>>:" + event.getPath());
         String path = event.getPath();
         if ((path == null) || !path.startsWith(prefixPath)) {
             return;
@@ -140,5 +141,11 @@ public class ZooWatcher implements Watcher {
 
     public void removeWatcher(ZooKeeperWatchIntf watcher) {
         watchers.remove(watcher);
+    }
+
+    public void fireReconnect() {
+        for (int i = 0; i < watchers.size(); i++) {
+            watchers.get(i).reconnect();
+        }
     }
 }

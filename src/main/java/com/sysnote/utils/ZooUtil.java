@@ -6,6 +6,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.CuratorWatcher;
 import org.apache.curator.retry.RetryNTimes;
+import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,6 +95,18 @@ public class ZooUtil {
         } catch (Exception e) {
             logger.error("getChilds", e);
             return null;
+        }
+    }
+
+    public static void setPath(CuratorFramework client, String path, String content, CreateMode mode) {
+        try {
+            if (client.checkExists().forPath(path) == null) {
+                client.create().withMode(mode).forPath(path, StringUtil.toBytes(content));
+            } else {
+                client.setData().forPath(path, StringUtil.toBytes(content));
+            }
+        } catch (Exception e) {
+            logger.error("setPath", e);
         }
     }
 }
