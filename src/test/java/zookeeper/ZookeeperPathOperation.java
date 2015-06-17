@@ -25,6 +25,7 @@ public class ZookeeperPathOperation {
                 .connectionTimeoutMs(5000)
                 .sessionTimeoutMs(15000)
                 .build();
+        System.out.println("created client for server:" + zkServers);
         return client;
     }
 
@@ -92,7 +93,7 @@ public class ZookeeperPathOperation {
     public void importZooData(){
         CuratorFramework client = create();
         client.start();
-        startSet(client,"/workspace/dev/envbak/139_zoo.text");
+        startSet(client,"/workspace/dev/envbak/139_zoo111.text");
         client.close();
     }
 
@@ -134,7 +135,7 @@ public class ZookeeperPathOperation {
     public void deleteTest(){
         CuratorFramework client = create();
         client.start();
-        deletePath(client, "/root");
+        deletePath(client, "/schedulerLeader");
         client.close();
     }
 
