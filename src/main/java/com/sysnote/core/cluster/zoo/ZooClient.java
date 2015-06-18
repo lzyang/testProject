@@ -20,7 +20,7 @@ import java.util.List;
 public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionStateListener {
 
     protected static Logger logger = LoggerFactory.getLogger(ZooClient.class);
-    public CuratorFramework framework = null;
+    protected CuratorFramework framework = null;
     public ArrayList<ZooWatcher> watchers = new ArrayList<ZooWatcher>();
 
     public ZooClient() {
@@ -50,7 +50,7 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
         if (event == null || event.getPath() == null) {
             return;
         }
-        System.out.println("process implements CuratorWatcher");
+        logger.debug("process implements CuratorWatcher");
         fireEvents(event);
         System.out.println(ClusterDic.self.appNodes());
     }
@@ -61,7 +61,7 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
         if (event == null || event.getPath() == null) {
             return;
         }
-        System.out.println("eventReceived implements CuratorListener");
+        logger.debug("eventReceived implements CuratorListener");
         fireEvents(event.getWatchedEvent());
         System.out.println(ClusterDic.self.appNodes());
     }

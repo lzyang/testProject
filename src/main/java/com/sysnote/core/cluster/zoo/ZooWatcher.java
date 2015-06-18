@@ -39,7 +39,7 @@ public class ZooWatcher implements Watcher {
         if (event == null) {
             return;
         }
-        System.out.println("event.toString()>>>"+event.toString() +" path>>:" + event.getPath());
+        logger.debug("event.toString()>>>"+event.toString() +" path>>:" + event.getPath());
         String path = event.getPath();
         if ((path == null) || !path.startsWith(prefixPath)) {
             return;

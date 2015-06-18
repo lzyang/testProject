@@ -2,6 +2,7 @@ package com.sysnote.core.app;
 
 import com.sysnote.core.cluster.factory.ModuleFactory;
 import com.sysnote.core.cluster.modules.ModuleDic;
+import com.sysnote.core.cluster.modules.ModuleQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,18 +13,19 @@ public class App {
 
     public static final Logger logger = LoggerFactory.getLogger(App.class);
 
-
     public static void init(){
-        ModuleFactory.registerModule("mq", ModuleDic.class);
-
+        ModuleFactory.registerModule("clusterDict", ModuleDic.class);
+        ModuleFactory.registerModule("queue", ModuleQueue.class);
     }
 
     public static void start() {
+        init();
         long start = System.currentTimeMillis();
         logger.info("java.library.path={}", new Object[] { System.getProperty("java.library.path") });
 
-
-
+        ModuleFactory.registerLoadModule("queue");
+        ModuleFactory.registerLoadModule("clusterDict");
+        ModuleFactory.loadModules();
         logger.info("All module started success in {} ms.", System.currentTimeMillis() - start);
     }
 

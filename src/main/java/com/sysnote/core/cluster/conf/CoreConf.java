@@ -16,4 +16,5 @@ public class CoreConf {
 
     public static final boolean DevelopMode = true;
     public static final String localName = StringUtil.getLocalName();
+    public static final String localIP = StringUtil.getLocalIP();
 }

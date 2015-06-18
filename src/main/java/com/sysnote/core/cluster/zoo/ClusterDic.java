@@ -2,6 +2,7 @@ package com.sysnote.core.cluster.zoo;
 
 import com.mongodb.BasicDBList;
 import com.sysnote.core.cluster.conf.CoreConf;
+import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ public class ClusterDic {
 
     public static ClusterDic self = null;
     private static Logger logger = LoggerFactory.getLogger(ClusterDic.class);
-    public ZooClient zooClient = null;
+    private ZooClient zooClient = null;
     public ZooWatcher appWatcher = null;
 
     static {
@@ -50,5 +51,9 @@ public class ClusterDic {
 
     public BasicDBList appNodes(){
         return appWatcher.nodes.records();
+    }
+
+    public CuratorFramework getClient(){
+        return this.zooClient.framework;
     }
 }

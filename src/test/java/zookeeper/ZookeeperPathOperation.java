@@ -25,7 +25,6 @@ public class ZookeeperPathOperation {
                 .connectionTimeoutMs(5000)
                 .sessionTimeoutMs(15000)
                 .build();
-        System.out.println("created client for server:" + zkServers);
         return client;
     }
 
@@ -89,7 +88,6 @@ public class ZookeeperPathOperation {
     /**
      * path>>>value
      */
-    @Test
     public void importZooData(){
         CuratorFramework client = create();
         client.start();
@@ -131,7 +129,6 @@ public class ZookeeperPathOperation {
         }
     }
 
-    @Test
     public void deleteTest(){
         CuratorFramework client = create();
         client.start();
