@@ -1,6 +1,7 @@
 package com.sysnote.core.cluster.zoo;
 
 import com.mongodb.BasicDBList;
+import com.sysnote.core.cluster.conf.CoreConf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
