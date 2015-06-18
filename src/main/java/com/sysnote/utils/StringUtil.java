@@ -1,9 +1,11 @@
 package com.sysnote.utils;
 
 import com.mongodb.BasicDBObject;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.StringWriter;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -128,5 +130,36 @@ public class StringUtil {
         } catch (Exception e) {
             return content.getBytes();
         }
+    }
+
+    public static String getLocalName() {
+        try {
+            Runtime run = Runtime.getRuntime();
+            Process proc = run.exec("hostname");
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(proc.getInputStream(), writer, "utf-8");
+            String name = StringUtil.trim(writer.toString());
+            return name;
+        } catch (Exception e) {
+            return "unknow";
+        }
+    }
+
+    /**
+     * 替换所有空格回车等字符
+     * @param text
+     * @return
+     */
+    public static String trim(String text) {
+        if (StringUtils.isEmpty(text)) {
+            return "";
+        }
+        final StringBuilder buffer = new StringBuilder(text.length());
+        for (final char ch : text.toCharArray()) {
+            if (ch != (char) 160 && ch != '\t' && ch != '\n' && ch != '\r' && ch != ' ') {
+                buffer.append(ch);
+            }
+        }
+        return buffer.toString();
     }
 }

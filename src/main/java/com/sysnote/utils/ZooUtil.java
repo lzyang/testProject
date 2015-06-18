@@ -1,6 +1,6 @@
 package com.sysnote.utils;
 
-import com.sysnote.core.cluster.CoreConf;
+import com.sysnote.core.cluster.conf.CoreConf;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
