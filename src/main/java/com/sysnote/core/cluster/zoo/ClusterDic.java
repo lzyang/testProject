@@ -13,11 +13,15 @@ public class ClusterDic {
 
     public static enum NodeAction {
         add, delete, datachange, childchange
-    };
+    }
+
+    ;
 
     public static enum NodeType {
         app
-    };
+    }
+
+    ;
 
     public static ClusterDic self = null;
     private static Logger logger = LoggerFactory.getLogger(ClusterDic.class);
@@ -36,7 +40,7 @@ public class ClusterDic {
         logger.info("ClusterDict init start...");
         zooClient = new ZooClient();
 
-        if(!zooClient.init()){
+        if (!zooClient.init()) {
             return false;
         }
 
@@ -49,11 +53,11 @@ public class ClusterDic {
     }
 
 
-    public BasicDBList appNodes(){
+    public BasicDBList appNodes() {
         return appWatcher.nodes.records();
     }
 
-    public CuratorFramework getClient(){
+    public CuratorFramework getClient() {
         return this.zooClient.framework;
     }
 }

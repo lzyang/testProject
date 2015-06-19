@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Morningsun(515190653@qq.com) on 15-6-17.
  */
-public class ModuleDic implements ModuleIntf,ZooKeeperWatchIntf {
+public class ModuleDic implements ModuleIntf, ZooKeeperWatchIntf {
 
     private static Logger logger = LoggerFactory.getLogger(ClusterDic.class);
 
@@ -25,11 +25,11 @@ public class ModuleDic implements ModuleIntf,ZooKeeperWatchIntf {
 
     @Override
     public boolean init(boolean isReload) {
-        if(!isReload){
+        if (!isReload) {
             name = CoreConf.localName + "@App";
-            serverNode.append("id",name + "#" + StringUtil.currentTime());
-            serverNode.append("name",name);
-            serverNode.append("ip",CoreConf.localIP);
+            serverNode.append("id", name + "#" + StringUtil.currentTime());
+            serverNode.append("name", name);
+            serverNode.append("ip", CoreConf.localIP);
             serverNode.append("services", ModuleFactory.loadedModules);
             ClusterDic.self.appWatcher.addWather(this);
 
@@ -65,7 +65,7 @@ public class ModuleDic implements ModuleIntf,ZooKeeperWatchIntf {
 
     @Override
     public void zooNodeChange(ClusterDic.NodeType type, ClusterDic.NodeAction action, String id, String ip) {
-        if(this.isAlive()) return;
+        if (this.isAlive()) return;
         //TODO 处理关注节点变化
     }
 
@@ -75,7 +75,7 @@ public class ModuleDic implements ModuleIntf,ZooKeeperWatchIntf {
         logger.info("zoo connection reconnected!");
     }
 
-    public void registerNode(){
+    public void registerNode() {
         ZooUtil.setPath(ClusterDic.self.getClient(), CoreConf.appNodesPrefix + this.getId(), serverNode.toString(), CreateMode.EPHEMERAL);
     }
 }

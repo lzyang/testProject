@@ -52,7 +52,7 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
         }
         logger.debug("process implements CuratorWatcher");
         fireEvents(event);
-        System.out.println(ClusterDic.self.appNodes());
+        logger.debug(ClusterDic.self.appNodes().toString());
     }
 
     //implements CuratorListener
@@ -63,7 +63,7 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
         }
         logger.debug("eventReceived implements CuratorListener");
         fireEvents(event.getWatchedEvent());
-        System.out.println(ClusterDic.self.appNodes());
+        logger.debug(ClusterDic.self.appNodes().toString());
     }
 
     //implements ConnectionStateListener

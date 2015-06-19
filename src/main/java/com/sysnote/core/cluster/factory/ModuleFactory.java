@@ -20,6 +20,7 @@ public class ModuleFactory {
 
     /**
      * 支持模块注册
+     *
      * @param moduleName
      * @param moduleClass
      */
@@ -29,9 +30,10 @@ public class ModuleFactory {
 
     /**
      * 支持模块注册
+     *
      * @param moduleName
      * @param moduleClass
-     * @param params　　模块初始化参数
+     * @param params      　　模块初始化参数
      */
     public static void registerModule(String moduleName, Class<?> moduleClass, Object[] params) {
         moduleInfos.put(moduleNameBy(moduleName), new ClassInfo(moduleClass, params, true));
@@ -39,6 +41,7 @@ public class ModuleFactory {
 
     /**
      * 模块名注册
+     *
      * @param name
      * @return
      */
@@ -52,6 +55,7 @@ public class ModuleFactory {
 
     /**
      * 注册load模块列表
+     *
      * @param module
      */
     public static void registerLoadModule(String module) {
@@ -60,8 +64,9 @@ public class ModuleFactory {
 
     /**
      * 注册load模块列表
+     *
      * @param module
-     * @param ips　　启动模块ip
+     * @param ips    　　启动模块ip
      */
     public static void registerLoadModule(String module, String[] ips) {
         if (EmptyUtils.isEmpty(ips) && containsModule(module)) {
@@ -71,7 +76,7 @@ public class ModuleFactory {
         if (!EmptyUtils.isEmpty(ips)) {
             for (String ip : ips) {
                 if (CoreConf.localIP.equalsIgnoreCase(ip)) {
-                    logger.info("module [{}] register ips [{}]", new String[] { module, ips.toString() });
+                    logger.info("module [{}] register ips [{}]", new String[]{module, ips.toString()});
                     loadedModules.add(moduleNameBy(module));
                 }
             }
@@ -83,15 +88,16 @@ public class ModuleFactory {
     /**
      * 加载模块是否包含此module
      * @param module
+     *
      * @return
      */
     public static boolean containsModule(String module) {
         return loadedModules.contains(moduleNameBy(module));
     }
 
-    public static ModuleIntf moduleCreate(String moduleName){
+    public static ModuleIntf moduleCreate(String moduleName) {
         ClassInfo info = moduleInfos.get(moduleName);
-        return info!=null?info.createModule():null;
+        return info != null ? info.createModule() : null;
     }
 
     /**
@@ -102,20 +108,20 @@ public class ModuleFactory {
             String moduleName = String.valueOf(loadedModules.get(i));
             ModuleIntf instance = ModuleFactory.moduleCreate(moduleName);
             if (instance == null) {
-                logger.error("module[{}] not be registered.", new String[] { moduleName });
+                logger.error("module[{}] not be registered.", new String[]{moduleName});
                 System.exit(-1);
             }
-            logger.info("===>Load Module[{}] Start.", new String[] { moduleName });
+            logger.info("===>Load Module[{}] Start.", new String[]{moduleName});
             if (instance.init(false) == false) {
-                logger.error("module[{}]  init fail", new String[] { moduleName });
+                logger.error("module[{}]  init fail", new String[]{moduleName});
                 System.exit(-1);
             }
             instance.start(false);
             if (instance.isAlive() == false) {
-                logger.error("module[{}]  start fail", new String[] { moduleName });
+                logger.error("module[{}]  start fail", new String[]{moduleName});
                 System.exit(-1);
             }
-            logger.info("===>Load module[{}] Ok.", new String[] { moduleName });
+            logger.info("===>Load module[{}] Ok.", new String[]{moduleName});
         }
     }
 }
