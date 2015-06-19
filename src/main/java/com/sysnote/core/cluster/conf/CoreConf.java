@@ -17,4 +17,6 @@ public class CoreConf {
     public static final boolean DevelopMode = true;
     public static final String localName = StringUtil.getLocalName();
     public static final String localIP = StringUtil.getLocalIP();
+    public static final int LevelDB_BatchUpdate = 90;
+    public static final int LevelDB_BatchDelete = 30;
 }

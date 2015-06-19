@@ -19,7 +19,7 @@ public class ClusterTest {
     }
 
     public void bootstrap(String nodeId){
-        CuratorFramework framework = ClusterDic.self.getClient();
+        CuratorFramework framework = ClusterDic.self.zooClient();
         BasicDBObject node = new BasicDBObject();
         node.append("id",nodeId);
         node.append("ip", StringUtil.getLocalIP());

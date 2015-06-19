@@ -27,13 +27,10 @@ public class ModuleDic implements ModuleIntf, ZooKeeperWatchIntf {
     public boolean init(boolean isReload) {
         if (!isReload) {
             name = CoreConf.localName + "@App";
-            serverNode.append("id", name + "#" + StringUtil.currentTime());
+            serverNode.append("id", name + "##" + StringUtil.currentTime());
             serverNode.append("name", name);
             serverNode.append("ip", CoreConf.localIP);
-            serverNode.append("services", ModuleFactory.loadedModules);
             ClusterDic.self.appWatcher.addWather(this);
-
-            registerNode();
         }
         return true;
     }
@@ -76,6 +73,7 @@ public class ModuleDic implements ModuleIntf, ZooKeeperWatchIntf {
     }
 
     public void registerNode() {
-        ZooUtil.setPath(ClusterDic.self.getClient(), CoreConf.appNodesPrefix + this.getId(), serverNode.toString(), CreateMode.EPHEMERAL);
+        serverNode.append("services", ModuleFactory.loadedModules);
+        ZooUtil.setPath(ClusterDic.self.zooClient(), CoreConf.appNodesPrefix +"/"+ this.getId(), serverNode.toString(), CreateMode.EPHEMERAL);
     }
 }

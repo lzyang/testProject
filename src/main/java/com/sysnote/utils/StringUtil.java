@@ -162,4 +162,15 @@ public class StringUtil {
         }
         return buffer.toString();
     }
+
+    public static String append(Object... strs) {
+        if (strs == null || strs.length == 0) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Object str : strs) {
+            sb.append(str);
+        }
+        return sb.toString();
+    }
 }

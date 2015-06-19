@@ -17,6 +17,7 @@ public class ModuleFactory {
     private static HashMap<String, ClassInfo> moduleInfos = new HashMap<String, ClassInfo>();
 
     public static BasicDBList loadedModules = new BasicDBList();
+    private static ModuleIntf appDict = null;
 
     /**
      * 支持模块注册
@@ -101,6 +102,16 @@ public class ModuleFactory {
     }
 
     /**
+     *加载实例module
+     * @param name
+     * @return
+     */
+    public static ModuleIntf moduleInstanceByName(String name){
+        ClassInfo info = moduleInfos.get(moduleNameBy(name));
+        return info != null ? (ModuleIntf)info.instance : null;
+    }
+
+    /**
      * 加载load模块
      */
     public static void loadModules() {
@@ -122,6 +133,19 @@ public class ModuleFactory {
                 System.exit(-1);
             }
             logger.info("===>Load module[{}] Ok.", new String[]{moduleName});
+        }
+    }
+
+    /**
+     * 返回单例module
+     * @return
+     */
+    public static ModuleIntf dic(){
+        if(appDict!=null){
+            return appDict;
+        }else{
+            appDict = moduleInstanceByName("appDict");
+            return appDict;
         }
     }
 }

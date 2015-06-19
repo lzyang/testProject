@@ -50,9 +50,9 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
         if (event == null || event.getPath() == null) {
             return;
         }
-        logger.debug("process implements CuratorWatcher");
+        logger.info("process implements CuratorWatcher");
         fireEvents(event);
-        logger.debug(ClusterDic.self.appNodes().toString());
+        logger.info(ClusterDic.self.appNodes().toString());
     }
 
     //implements CuratorListener
@@ -61,15 +61,15 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
         if (event == null || event.getPath() == null) {
             return;
         }
-        logger.debug("eventReceived implements CuratorListener");
+        logger.info("eventReceived implements CuratorListener");
         fireEvents(event.getWatchedEvent());
-        logger.debug(ClusterDic.self.appNodes().toString());
+        logger.info(ClusterDic.self.appNodes().toString());
     }
 
     //implements ConnectionStateListener
     @Override
     public void stateChanged(CuratorFramework curatorFramework, ConnectionState connectionState) {
-        System.out.println("stateChanged  implements ConnectionStateListener");
+        logger.info("stateChanged  implements ConnectionStateListener");
         if (connectionState == ConnectionState.RECONNECTED) {
             logger.info("Zookeeper Reconnect [{}]", new String[] { curatorFramework.toString() });
             for (int i = 0; i < watchers.size(); i++) {

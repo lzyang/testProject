@@ -57,7 +57,7 @@ public class ClusterDic {
         return appWatcher.nodes.records();
     }
 
-    public CuratorFramework getClient() {
+    public CuratorFramework zooClient() {
         return this.zooClient.framework;
     }
 }
