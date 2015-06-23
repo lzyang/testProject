@@ -21,7 +21,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+    protected void messageReceived(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
         System.out.println("Client received: " + in.toString(CharsetUtil.UTF_8));
     }
 
