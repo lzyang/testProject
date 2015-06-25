@@ -82,6 +82,17 @@ public class StringUtil {
         }
     }
 
+    public static String currentFullTime(){
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis());
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS");
+        try{
+            return df.format(date);
+        }catch(Exception e){
+            return "";
+        }
+    }
+
     /**
      * 获取请求地址
      * @param request

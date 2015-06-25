@@ -40,7 +40,6 @@ public class WebSocketServer {
             System.out.println("web socket server started at port "+port+".");
             System.out.println("Open your browser and navigate to http://localhost:"+port+"/");
             ch.closeFuture().sync();
-
         }finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
