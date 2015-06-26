@@ -86,9 +86,9 @@ public class Jzmq {
     public void push() {
         ZMQ.Context context = ZMQ.context(1);
         ZMQ.Socket push = context.socket(ZMQ.PUSH);
-        push.bind("ipc://fjs");
+        push.bind("ipc://push-pull");
 
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < 10000; i++) {
             push.send("hello pull");
             System.out.println("sss");
         }
@@ -100,7 +100,7 @@ public class Jzmq {
     public void pull() {
         ZMQ.Context context = ZMQ.context(1);
         ZMQ.Socket pull = context.socket(ZMQ.PULL);
-        pull.connect("ipc://fjs");
+        pull.connect("ipc://push-pull");
         while (true) {
             String message = new String(pull.recv());
             System.out.println(message);
