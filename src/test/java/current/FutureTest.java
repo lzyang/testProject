@@ -28,6 +28,14 @@ public class FutureTest {
         });
 
         exec.execute(futureTask);
+
+//        FutureTask<Integer> futureTask1 = (FutureTask<Integer>) exec.submit(new Callable<Integer>() {
+//            @Override
+//            public Integer call() throws Exception {
+//                return 0;
+//            }
+//        });
+
         LogUtil.printLog("executing...");
         try {
             String result = futureTask.get(10000, TimeUnit.MILLISECONDS);
