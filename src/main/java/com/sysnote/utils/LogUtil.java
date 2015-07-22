@@ -13,7 +13,7 @@ public class LogUtil {
 
     public static void printLog(String content){
         StringBuffer sbf = new StringBuffer();
-        sbf.append("[").append(StringUtil.currentFullTime()).append("] ").append(content);
+        sbf.append(content);
         testLog.info(sbf.toString());
     }
 }
