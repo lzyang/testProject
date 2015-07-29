@@ -21,7 +21,7 @@ public class FutureTest {
         FutureTask<String> futureTask = new FutureTask<String>(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                Thread.sleep(8000);
+                Thread.sleep(2000);
                 LogUtil.printLog("task exec finish!");
                 return "task exec success!!";
             }
@@ -36,7 +36,13 @@ public class FutureTest {
 //            }
 //        });
 
-        LogUtil.printLog("executing...");
+        LogUtil.printLog("executing others...");
+        try {
+            Thread.sleep(6000);  //做其它事情
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        LogUtil.printLog("executing others finish");
         try {
             String result = futureTask.get(10000, TimeUnit.MILLISECONDS);
             LogUtil.printLog("result:" + result);
