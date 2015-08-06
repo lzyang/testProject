@@ -7,6 +7,7 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPoolConfig;
 
+import javax.sound.midi.Soundbank;
 import java.util.*;
 
 /**
@@ -191,7 +192,7 @@ public class RedisClusterClient {
     }
 
     /**
-     * 设置hash值，如果key不存在则创建，如果存在则覆盖
+     * 设置hash值，如果key不存在则创建，如果存在则插入
      * @param key
      * @param hash
      * @return
@@ -291,7 +292,48 @@ public class RedisClusterClient {
         return jedisCluster.exists(key);
     }
 
+
+    public Set<String> keys(String key){
+        
+        return null;
+    }
     public static void main(String[] args){
-        System.out.println(RedisClusterClient.es().get("t1"));
+        int module = 1;
+        RedisClusterClient jc = RedisClusterClient.es();
+        switch (module){
+            case 0:
+                jc.set("simset", "tvalue");
+                System.out.println(jc.get("simset"));
+                break;
+            case 1:
+                jc.remove("mp_t1");
+                System.out.println(jc.hgetAll("mp_t1"));
+
+                jc.hset("mp_t1","key1","k1");
+                jc.hset("mp_t1","key2","k2");
+                System.out.println(jc.hget("mp_t1","key1"));
+                Map<String,String> tm = new HashMap<String, String>();
+                tm.put("key3","k3");
+                tm.put("key4","k4");
+                System.out.println(jc.hmset("mp_t1", tm));
+                System.out.println(jc.hget("mp_t1", "key3"));
+                jc.hset("mp_t1", "key5", "k5");
+                jc.hdelete("mp_t1", "key2");
+                System.out.println(jc.hgetAll("mp_t1"));
+
+                jc.expire("mp_t1",5);
+                try {
+                    Thread.sleep(4000);
+                    System.out.println(jc.hgetAll("mp_t1"));
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(jc.exists("mp_t1"));
+                System.out.println(jc.hgetAll("mp_t1"));
+                break;
+            case 2:
+                break;
+        }
     }
 }

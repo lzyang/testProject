@@ -83,9 +83,10 @@ public class RedisClient {
         ShardedJedis one = pool.getResource();
         ShardedJedisPipeline pipeline = one.pipelined();
 
-        pipeline.set("key","value");
-
-        List<Object> result = pipeline.syncAndReturnAll();
+//        pipeline.set("key","value");
+//
+        one.set("tshard","213");
+//        List<Object> result = pipeline.syncAndReturnAll();
         pool.returnResource(one);
 
         pool.destroy();
@@ -167,9 +168,11 @@ public class RedisClient {
 //        System.out.println(jc.get("monitorTest"));
 
 
-//        System.out.println(jc.getClusterNodes());
+        System.out.println(jc.getClusterNodes());
 
         Map<String, JedisPool> poolMap = jc.getClusterNodes();
+
+
 
         for(String key:poolMap.keySet()){
             StringBuffer sbf = new StringBuffer();
@@ -180,7 +183,7 @@ public class RedisClient {
             sbf.append("  Idle:" + pool.getNumIdle());
             sbf.append("  NumWaiters:" + pool.getNumWaiters());
 
-
+            jedis.set("t2","v1:"+key);
 
             System.out.println(sbf);
         }
@@ -194,6 +197,8 @@ public class RedisClient {
 //        long totalTime = System.currentTimeMillis()-start;
 //        System.out.println("totalTime:"+ totalTime);
 //        System.out.println("perCircle:"+totalTime/10000);
+
+
 
 
         jc.close();
