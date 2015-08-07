@@ -7,11 +7,14 @@ import org.ansj.splitWord.analysis.BaseAnalysis;
 import org.ansj.splitWord.analysis.IndexAnalysis;
 import org.ansj.splitWord.analysis.ToAnalysis;
 import org.elasticsearch.action.ActionListener;
+import org.elasticsearch.action.WriteConsistencyLevel;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.support.replication.ReplicationType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.script.ScriptService;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -24,6 +27,15 @@ import java.util.Map;
  * Created by Morningsun(515190653@qq.com) on 15-8-5.
  */
 public class ShopIndex {
+    private String ip = "10.144.33.211";
+    private int port = 9300;
+    private String clusterName = "lzyESTest";
+
+    private String indexName = "shop_v1";
+    private String indexType = "shopType";
+
+    private Client client = ESClientUtils.getTranClient(ip,port,clusterName);
+
     private BasicDBList getData(){
         BasicDBList data = new BasicDBList();
         data.add(new BasicDBObject().append("id","80000001").append("name","飞利浦车品官方旗舰店").append("type","1").append("brands","飞利浦")
@@ -100,7 +112,6 @@ public class ShopIndex {
     }
 
     public void addDocs(List<BasicDBObject> docs){
-        Client client = ESClientUtils.getTranClient("10.144.33.211",9300,"lzyESTest");
 
         BulkRequestBuilder bulk = client.prepareBulk();
         for(BasicDBObject docData:docs){
@@ -118,21 +129,38 @@ public class ShopIndex {
                 bulk.add(client.prepareIndex("shop_v1","shopType",docData.getString("id")).setSource(xcb));
             }
         }
-        bulk.execute(new ActionListener<BulkResponse>() {
-            @Override
-            public void onResponse(BulkResponse bulkItemResponses) {
-                System.out.println(bulkItemResponses.getItems().toString());
-            }
+        //TODO find out
+        bulk.setReplicationType(ReplicationType.SYNC)
+                .setConsistencyLevel(WriteConsistencyLevel.ALL)
+                .execute().actionGet();
+//        bulk.execute(new ActionListener<BulkResponse>() {
+//            @Override
+//            public void onResponse(BulkResponse bulkItemResponses) {
+//                System.out.println(bulkItemResponses.getItems().toString());
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable e) {
+//                e.printStackTrace();
+//            }
+//        });
+    }
 
-            @Override
-            public void onFailure(Throwable e) {
-                e.printStackTrace();
-            }
-        });
+    public void updateFieldById(String id,String field,Object value){
+        StringBuffer script = new StringBuffer("ctx._source.").append(field).append("=");
+        if(value instanceof String){
+            script.append("'").append(value).append("'");
+        }else{
+            script.append(value);
+        }
+        client.prepareUpdate(indexName,indexType,id).setScript(script.toString(), ScriptService.ScriptType.INLINE)
+                .setRetryOnConflict(3).setReplicationType(ReplicationType.SYNC)
+                .setConsistencyLevel(WriteConsistencyLevel.ALL).execute();
     }
 
     @Test
     public void test(){
-        addDocs(dealDocs());
+        //addDocs(dealDocs());
+        updateFieldById("80000001","prodcount",15);
     }
 }
