@@ -8,10 +8,9 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
@@ -42,7 +41,7 @@ public class ShopSearch {
         srb.setExplain(true);
         System.out.println(srb);
         System.out.println("=========================================");
-        System.out.println(response);
+//        System.out.println(response);
 
         handleResult(response);
     }
@@ -58,7 +57,7 @@ public class ShopSearch {
             for(Term term:terms){
                 query.append(term.getName());
                 i++;
-                if(i<terms.size())query.append(" AND ");
+                if(i<terms.size())query.append(" OR ");
             }
             query.append(" )");
         }
@@ -82,7 +81,23 @@ public class ShopSearch {
         String question = "";
 
         query = QueryBuilders.filteredQuery(QueryBuilders.queryString(parseQuery(question)), boolFilter);
+//        query = QueryBuilders.simpleQueryString(question);
+//        query = QueryBuilders.termsQuery("type","1","3");
+        BoolQueryBuilder bool =  QueryBuilders.boolQuery();
+        bool.must(QueryBuilders.termsQuery("type", "1", "3"));
+        bool.must(QueryBuilders.simpleQueryString("title:品胜"));
+        query = bool;
 
+        //query = QueryBuilders.functionScoreQuery(FilterBuilders.termFilter("brands","pinshegn"), ScoreFunctionBuilders.f)
+
+        return query;
+    }
+
+    public QueryBuilder testFunctionScoreQuery(){
+        QueryBuilder query = QueryBuilders.matchAllQuery();
+
+        query = QueryBuilders.functionScoreQuery(ScoreFunctionBuilders.scriptFunction(""));
+        System.out.println(query);
         return query;
     }
 
