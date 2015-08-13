@@ -37,8 +37,8 @@ public class ShopSearch {
         srb.setQuery(testBaseQuery());
         srb.addAggregation(testAgg());
         //srb.addSort(testSort());
-        SearchResponse response = srb.get();
         srb.setExplain(true);
+        SearchResponse response = srb.get();
         System.out.println(srb);
         System.out.println("=========================================");
 //        System.out.println(response);
@@ -84,11 +84,13 @@ public class ShopSearch {
 //        query = QueryBuilders.simpleQueryString(question);
 //        query = QueryBuilders.termsQuery("type","1","3");
         BoolQueryBuilder bool =  QueryBuilders.boolQuery();
-        bool.must(QueryBuilders.termsQuery("type", "1", "3"));
-        bool.must(QueryBuilders.simpleQueryString("title:品胜"));
+//        bool.must(QueryBuilders.termsQuery("type", "1", "3"));
+        bool.must(QueryBuilders.simpleQueryString("title:品 胜"));
         query = bool;
 
-        //query = QueryBuilders.functionScoreQuery(FilterBuilders.termFilter("brands","pinshegn"), ScoreFunctionBuilders.f)
+        query = QueryBuilders.functionScoreQuery(bool)
+                .add(ScoreFunctionBuilders.scriptFunction("doc['delvspeed'].value"))
+                .boostMode("replace");
 
         return query;
     }
@@ -96,7 +98,7 @@ public class ShopSearch {
     public QueryBuilder testFunctionScoreQuery(){
         QueryBuilder query = QueryBuilders.matchAllQuery();
 
-        query = QueryBuilders.functionScoreQuery(ScoreFunctionBuilders.scriptFunction(""));
+        query = QueryBuilders.functionScoreQuery(ScoreFunctionBuilders.scriptFunction("_score"));
         System.out.println(query);
         return query;
     }
@@ -104,6 +106,7 @@ public class ShopSearch {
     public void handleResult(SearchResponse response){
         SearchHits hits = response.getHits();
         for(SearchHit hit : hits){
+            System.out.println(hit.explanation());
             System.out.println(new BasicDBObject(hit.getSource()));
         }
         /////////////////////agg

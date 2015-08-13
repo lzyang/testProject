@@ -29,7 +29,6 @@ public class QueryBuilderTest {
 
         query = QueryBuilders.functionScoreQuery(FilterBuilders.termFilter("city","name"), ScoreFunctionBuilders.weightFactorFunction(0.5f));
 
-
         System.out.println(query);
     }
 
