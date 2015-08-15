@@ -64,7 +64,7 @@ public class BitMap {
         if(bit == true){
             cell |= 1<<PosInCell;
         }else{
-            cell &= (1<<PosInCell);  //TODO
+            cell &= (1<<PosInCell)^Integer.MAX_VALUE;
         }
     }
 
