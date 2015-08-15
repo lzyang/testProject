@@ -19,8 +19,16 @@ public class BitOperation {
         printBinary(65535);
     }
 
+    @Test
+    public void testShort(){
+        char a = 12323;
+//        short b = a&0x128;  //char和short在java中进行位运算会自动转化为int再进行运算
+        System.out.println(a);
+
+    }
+
     /**
-     *
+     *打印正数二进制
      * @param x
      */
     public void printBinary(int x){
@@ -82,4 +90,5 @@ public class BitOperation {
         }
         System.out.println(binaryStr);
     }
+
 }
