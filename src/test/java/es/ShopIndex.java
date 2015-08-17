@@ -1,5 +1,7 @@
 package es;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import org.ansj.domain.Term;
@@ -17,10 +19,12 @@ import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.script.ScriptService;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -93,6 +97,41 @@ public class ShopIndex {
         return str.toString();
     }
 
+    private List<BasicDBObject> readFile(){
+        String filePath = "/server/dev/file/uat_merchent.csv";
+        final File file = new File(filePath);
+        List<BasicDBObject> docs = new LinkedList<BasicDBObject>();
+        List<String> result = null;
+        try {
+            result = Files.readLines(file, Charsets.UTF_8);
+            for(String line:result){
+                BasicDBObject doc = new BasicDBObject();
+                String[] fields = line.split(",");
+                if(fields.length!=9) System.out.println(">>>>>>>>>>>>>:"+line);
+                if(fields[0].equals("MERCHANT_ID"))continue;
+                doc.append("id", fields[0]);
+                doc.append("name",fields[1]);
+                doc.append("type",fields[2]);
+//                doc.append("cats",fields[1]);
+                doc.append("brands",fields[6]);
+                doc.append("logo",fields[7]);
+
+                Random rom = new Random();
+
+                doc.append("score",rom.nextInt(100));
+                doc.append("delvspeed",rom.nextInt(10));
+                doc.append("servscore",rom.nextInt(5));
+                doc.append("prodcount",fields[8]);
+                doc.append("addr",fields[4]);
+                System.out.println(doc);
+                docs.add(doc);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  docs;
+    }
+
     private List<BasicDBObject> dealDocs(){
         List<BasicDBObject> result = new LinkedList<BasicDBObject>();
         BasicDBList data = getData();
@@ -126,7 +165,7 @@ public class ShopIndex {
                 e.printStackTrace();
             }
             if(xcb!=null){
-                bulk.add(client.prepareIndex("shop_v1","shopType",docData.getString("id")).setSource(xcb));
+                bulk.add(client.prepareIndex("shop_v2","shopType",docData.getString("id")).setSource(xcb));
             }
         }
         //TODO find out
@@ -160,7 +199,9 @@ public class ShopIndex {
 
     @Test
     public void test(){
-        //addDocs(dealDocs());
-        updateFieldById("80000001","prodcount",15);
+        addDocs(readFile());
+//        addDocs(dealDocs());
+//        updateFieldById("80000001","prodcount",15);
     }
+
 }
