@@ -123,7 +123,13 @@ public class ShopIndex {
                 doc.append("servscore",rom.nextInt(5));
                 doc.append("prodcount",fields[8]);
                 doc.append("addr",fields[4]);
-                System.out.println(doc);
+
+                StringBuilder btitle = new StringBuilder();
+                btitle.append(fields[1]).append(" ");
+                btitle.append(fields[6]);
+                List<Term> titleTerms = IndexAnalysis.parse(btitle.toString());
+                doc.append("title",segToString(titleTerms));
+
                 docs.add(doc);
             }
         } catch (IOException e) {
@@ -145,7 +151,8 @@ public class ShopIndex {
 //            List<Term> titleTerms = BaseAnalysis.parse(btitle.toString());
 //            List<Term> titleTerms = ToAnalysis.parse(btitle.toString());
 //            System.out.println(segToString(titleTerms));
-            result.add(item);
+            System.out.println(item);
+            //result.add(item);
         }
         return result;
     }
