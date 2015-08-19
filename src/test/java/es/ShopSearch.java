@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.sysnote.utils.StringUtil;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.IndexAnalysis;
+import org.apache.lucene.search.Explanation;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -40,7 +41,7 @@ public class ShopSearch {
         srb.setExplain(true);
         SearchResponse response = srb.get();
         System.out.println(srb);
-        System.out.println("=========================================");
+        System.out.println("========================================="+response.getHits().getTotalHits());
 //        System.out.println(response);
 
         handleResult(response);
@@ -59,13 +60,13 @@ public class ShopSearch {
                 i++;
                 if(i<terms.size())query.append(" OR ");
             }
-            query.append(" )");
+            query.append(")");
         }
         return query.toString();
     }
 
     public AggregationBuilder testAgg(){
-        return AggregationBuilders.terms("agg").field("brands");
+        return AggregationBuilders.terms("agg").field("brands").size(0);
     }
 
     public SortBuilder testSort(){
@@ -78,19 +79,20 @@ public class ShopSearch {
         BoolFilterBuilder boolFilter = FilterBuilders.boolFilter().cache(true);
         boolFilter.must(FilterBuilders.termFilter("type", "3"));
 
-        String question = "";
+        String question = "史宁博";
 
-        query = QueryBuilders.filteredQuery(QueryBuilders.queryString(parseQuery(question)), boolFilter);
-//        query = QueryBuilders.simpleQueryString(question);
+//        query = QueryBuilders.filteredQuery(QueryBuilders.queryString(parseQuery(question)), boolFilter);
+//        query = QueryBuilders.simpleQueryString(parseQuery(question));
 //        query = QueryBuilders.termsQuery("type","1","3");
         BoolQueryBuilder bool =  QueryBuilders.boolQuery();
 //        bool.must(QueryBuilders.termsQuery("type", "1", "3"));
-        bool.must(QueryBuilders.simpleQueryString("title:品 胜"));
-        query = bool;
-
-        query = QueryBuilders.functionScoreQuery(bool)
-                .add(ScoreFunctionBuilders.scriptFunction("doc['delvspeed'].value"))
-                .boostMode("replace");
+        bool.must(QueryBuilders.queryString(parseQuery(question)).boost(100));
+//        query = bool;
+        String queryStr = "("+parseQuery(question)+")^20";  //query设置boost一样
+        //query = QueryBuilders.functionScoreQuery(QueryBuilders.filteredQuery(QueryBuilders.queryString(parseQuery(question)),boolFilter).boost(20))
+        query = QueryBuilders.functionScoreQuery(QueryBuilders.filteredQuery(QueryBuilders.queryString(queryStr),boolFilter))
+                .add(ScoreFunctionBuilders.scriptFunction("doc['score'].value"))
+                .boostMode("sum");
 
         return query;
     }
@@ -105,9 +107,11 @@ public class ShopSearch {
 
     public void handleResult(SearchResponse response){
         SearchHits hits = response.getHits();
+        int i = 0;
         for(SearchHit hit : hits){
-            System.out.println(hit.explanation());
-            System.out.println(new BasicDBObject(hit.getSource()));
+            System.out.println("No."+(++i) + " >>>" + new BasicDBObject(hit.getSource()));
+            System.out.println(hit.getExplanation());
+
         }
         /////////////////////agg
         Terms agg = response.getAggregations().get("agg");
@@ -131,7 +135,7 @@ public class ShopSearch {
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                 .setIndices("shop")
                 .setTypes("shopType")
-                .setFrom(0).setSize(10);
+                .setFrom(0).setSize(100);
         return srb;
     }
 }
