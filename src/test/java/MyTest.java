@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -20,8 +21,34 @@ public class MyTest {
         System.out.println(o.getInt("ss",0));
     }
 
+    //TODO ERROR need debug
     @Test
-    public void testBuf(){
+    public void testWaite(){
+        final AtomicInteger t1Tag = new AtomicInteger(0);
+
+        Runnable r1 = new Runnable() {
+            public void run() {
+                try {
+                    while (true){
+                        Thread.sleep(1000);
+                        System.out.println(t1Tag.addAndGet(1));
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Thread t1 = new Thread(r1);
+        t1.start();
+
+        try {
+            Thread.sleep(5000);
+            r1.wait();
+            Thread.sleep(3000);
+            r1.notify();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
