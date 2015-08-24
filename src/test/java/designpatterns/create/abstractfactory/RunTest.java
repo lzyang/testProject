@@ -1,4 +1,4 @@
-package designpatterns.abstractfactory;
+package designpatterns.create.abstractfactory;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package designpatterns.singleton;
+package designpatterns.create.singleton;
 
 /**
  * Created by Morningsun(515190653@qq.com) on 15-8-24.
