@@ -2,11 +2,15 @@ package es;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import org.elasticsearch.action.admin.indices.template.get.GetIndexTemplatesResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.cluster.metadata.IndexTemplateMetaData;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.junit.Test;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -38,6 +42,21 @@ public class ESIndex {
             bulkReq.execute().actionGet();
         }catch(Exception e){
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void templateView(){
+        Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, "lzyESTest");
+        GetIndexTemplatesResponse response = client.admin().indices().prepareGetTemplates().get();
+        List<IndexTemplateMetaData> temps = response.getIndexTemplates();
+        for(IndexTemplateMetaData temp : temps){
+            System.out.println("=========================================");
+            System.out.println("template:"+temp.template());
+            System.out.println("Name:"+temp.getName());
+            System.out.println("Order:"+temp.getOrder());
+            System.out.println("Settings:"+temp.getSettings().getAsMap());
+            System.out.println("Mappings:"+temp.getMappings());
         }
     }
 }
