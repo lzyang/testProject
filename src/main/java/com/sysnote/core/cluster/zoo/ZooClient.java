@@ -44,15 +44,13 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
         watchers.add(watcher);
     }
 
-    //implements CuratorWatcher
+    //implements CuratorWatcher  处理事件通知,节点建立,删除,数据变化,子节点变化
     @Override
     public void process(WatchedEvent event) throws Exception {
         if (event == null || event.getPath() == null) {
             return;
         }
-        logger.info("process implements CuratorWatcher");
         fireEvents(event);
-        logger.info(ClusterDic.self.appNodes().toString());
     }
 
     //implements CuratorListener
@@ -61,7 +59,6 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
         if (event == null || event.getPath() == null) {
             return;
         }
-        logger.info("eventReceived implements CuratorListener");
         fireEvents(event.getWatchedEvent());
         logger.info(ClusterDic.self.appNodes().toString());
     }
@@ -69,7 +66,6 @@ public class ZooClient implements CuratorWatcher, CuratorListener, ConnectionSta
     //implements ConnectionStateListener
     @Override
     public void stateChanged(CuratorFramework curatorFramework, ConnectionState connectionState) {
-        logger.info("stateChanged  implements ConnectionStateListener");
         if (connectionState == ConnectionState.RECONNECTED) {
             logger.info("Zookeeper Reconnect [{}]", new String[] { curatorFramework.toString() });
             for (int i = 0; i < watchers.size(); i++) {
