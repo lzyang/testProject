@@ -6,18 +6,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
+import com.mongodb.*;
 import com.mongodb.MongoClientOptions.Builder;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
 import com.sysnote.utils.StringUtil;
+import sun.reflect.generics.tree.BaseType;
 
 /**
  * Created by root on 15-2-6.
@@ -41,6 +33,7 @@ public class MongoTools {
         builder.connectTimeout(3000);
         mongoClientOptions = builder.build();
     }
+
 
     /**
      * 通过ip获取mongo信息
@@ -182,5 +175,47 @@ public class MongoTools {
             resultList.add(dbo);
         }
         return resultList;
+    }
+
+    public static void main(String[] args){
+        DBCollection conn =  MongoTools.getMongoConn("10.58.22.16", 19753, "dragon", "reserve", "gome", "totem");
+        DBCollection newConn = null;
+        try {
+            MongoClient mongoClient = new MongoClient(new ServerAddress("10.58.22.16",19753),mongoClientOptions);
+            DB db = mongoClient.getDB("newdragon");
+            newConn = db.getCollection("reserve");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        if(!newConn.getStats().ok()){
+            System.out.println(newConn.getStats().ok());
+            return;
+        }
+
+        long nowtime = System.currentTimeMillis();
+
+        DBCursor cur = conn.find();
+        List<DBObject> batch = new ArrayList<DBObject>();
+        while (cur.hasNext()){
+            DBObject dbo = cur.next();
+            dbo.removeField("_id");
+            //dbo.removeField("_class");
+
+            BasicDBObject st = (BasicDBObject)dbo;
+            if(nowtime < st.getLong("reserveEtime",0) || nowtime < st.getLong("buyEtime",0)){
+                System.out.println(st);
+            }
+
+            batch.add(dbo);
+            if(batch.size()>30){
+                newConn.insert(batch);
+                System.out.println(">>>>>>>>>>inserted :" + batch.size());
+                batch = new ArrayList<DBObject>();
+            }
+        }
+        if(batch.size()>0){
+            newConn.insert(batch);
+        }
+        System.out.println(">>>>>>>>>inserted :" + batch.size());
     }
 }

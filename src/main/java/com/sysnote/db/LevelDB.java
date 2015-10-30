@@ -6,16 +6,13 @@ import com.sysnote.core.cluster.conf.CoreConf;
 import com.sysnote.utils.StringUtil;
 import org.apache.commons.io.FileUtils;
 import org.fusesource.leveldbjni.JniDBFactory;
-import org.iq80.leveldb.DB;
-import org.iq80.leveldb.DBFactory;
-import org.iq80.leveldb.Options;
-import org.iq80.leveldb.WriteBatch;
-import org.iq80.leveldb.WriteOptions;
+import org.iq80.leveldb.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -190,21 +187,51 @@ public class LevelDB {
     }
 
 
+    public static byte[] bytes(String key){
+        try {
+            return key.getBytes("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * @param args
      */
     public static void main(String[] args) {
         LevelDB db = new LevelDB("/server/dev/prd/", "test");
-        if (db.init() == false) {
-            return;
-        }
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 100000000; i++) {
-            db.put("key" + i, "test" + i);
-            if (i > 1000) {
-                db.get("key" + (i - 1000));
+//        if (db.init() == false) {
+//            return;
+//        }
+//        long start = System.currentTimeMillis();
+//        for (int i = 0; i < 100000000; i++) {
+//            db.put("key" + i, "test" + i);
+//            if (i > 1000) {
+//                db.get("key" + (i - 1000));
+//            }
+//        }
+//        System.out.println(System.currentTimeMillis() - start);
+
+        try {
+            DB instance = factory.open(new File("/server/index/dataTest"), options);
+//            for(int i=0;i<100;i++){
+//                instance.put(bytes("keys"+i),bytes("va"));
+//            }
+            System.out.println(new String(instance.get(bytes("keys"+9))));
+            DBIterator dbiter = instance.iterator(new ReadOptions());
+
+            dbiter.seekToFirst();
+
+            System.out.println(dbiter);
+            System.out.println(dbiter.hasNext());
+            while (dbiter.hasNext()){
+                Entry<byte[],byte[]> en = dbiter.next();
+                System.out.print(new String(en.getKey()));
+                System.out.println("->"+new String(en.getValue()));
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.println(System.currentTimeMillis() - start);
     }
 }
