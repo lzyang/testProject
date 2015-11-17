@@ -1,5 +1,10 @@
 package datastructure.tree;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by Morningsun(515190653@qq.com) on 15-11-17.
  */
@@ -59,15 +64,89 @@ public class TrieTree {
     }
 
 
+
+    /**
+     * 遍历出所有的字符串
+     */
+    public Set<String> readAllStr(){
+        Set<String> allStr = new HashSet<String>();
+        readNode(root,allStr,"");
+        return allStr;
+    }
+
+    /**
+     * 读取当前节点,遍历用
+     * @param node
+     * @param allStr
+     * @param preChar
+     */
+    public void readNode(Node node,Set<String> allStr,String preChar) {
+        if(node.words!=0){
+            allStr.add(preChar);
+        }
+        for(int i=0;i<node.edges.length;i++){
+            if(node.edges[i]!=null){
+                String nStr = new String(preChar);
+                nStr += (char)('a' + i);
+                readNode(node.edges[i],allStr,nStr);
+            }
+        }
+    }
+
+    /**
+     * 获取与输入词最大匹配的词
+     * @param prefix
+     * @return
+     */
+    public String getMaxMatchStr(String prefix){
+        String s = "";
+        String temp = "";//记录最长迪单词
+        char[] w = prefix.toCharArray();
+        Node node = root;
+        for(int i=0;i<w.length;i++){
+            char c = w[i];
+            c = Character.toLowerCase(c);
+            int index = c - 'a';
+            if(node.edges[index]==null){  //当前节点无字节点匹配
+                if(node.words!=0){  //当前节点成词
+                    return s;   //返回已匹配的字符
+                }else{         //当前节点不成词
+                    return null;
+                }
+            }else{    //当前节点有字节点匹配
+                s+=c;
+                if(node.words!=0){  //当前节点成词
+                    temp = s;
+                    System.out.println("temp:"+temp);
+                }
+                node = node.edges[index];
+            }
+        }
+        if(node!=null){
+            //TODO 有比当前词更长的词
+            return temp;
+        }
+        return s;
+    }
+
     public static void main(String[] args){
         TrieTree tree = new TrieTree();
 
         tree.addStr("abcd");
         tree.addStr("cdcd");
-        tree.addStr("csed");
-        tree.addStr("dscd");
-        System.out.println(tree.info());
+        tree.addStr("cdc");
+        tree.addStr("cdcdddfsafds");
+        tree.addStr("cdcdddfsa");
+        tree.addStr("cdcddfsdd");
+        tree.addStr("cdcdaaaaaaaaaa");
+        tree.addStr("d");
 
+        System.out.println("max:" + tree.getMaxMatchStr("cdcd"));
 
+        System.out.println("tree.readAllStr:"+tree.readAllStr());
+
+        System.out.println("tree.info:" + tree.info());
+
+        System.out.println((char)('a'+1));
     }
 }
