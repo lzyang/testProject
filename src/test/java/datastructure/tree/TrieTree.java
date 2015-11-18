@@ -123,10 +123,36 @@ public class TrieTree {
             }
         }
         if(node!=null){
-            //TODO 有比当前词更长的词
             return temp;
         }
         return s;
+    }
+
+    /**
+     * 获取前缀为输入prefix的词
+     * @param prefix
+     * @return
+     */
+    public Set<String> getPrefixStrList(String prefix){
+        Set<String> strSet = new HashSet<String>();
+        char[] w = prefix.toCharArray();
+        Node node = root;
+        for(int i=0;i<w.length;i++){
+            char c = w[i];
+            c = Character.toLowerCase(c);
+            int index = c - 'a';
+            if(node.edges[index]==null){  //当前节点无字节点匹配
+                return strSet;
+            }else{    //当前节点有字节点匹配
+                node = node.edges[index];
+            }
+        }
+
+        if(node!=null){
+            // 有比当前词更长的词
+            readNode(node,strSet,prefix);
+        }
+        return strSet;
     }
 
     public static void main(String[] args){
@@ -146,6 +172,8 @@ public class TrieTree {
         System.out.println("tree.readAllStr:"+tree.readAllStr());
 
         System.out.println("tree.info:" + tree.info());
+
+        System.out.println("tree.getPrefixStrList:" + tree.getPrefixStrList("cd"));
 
         System.out.println((char)(25105));
         System.out.println('我'-0);
