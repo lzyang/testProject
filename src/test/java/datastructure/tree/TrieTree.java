@@ -1,5 +1,9 @@
 package datastructure.tree;
 
+import com.sun.media.sound.SoftTuning;
+import org.junit.Test;
+
+import javax.xml.bind.SchemaOutputResolver;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -178,4 +182,14 @@ public class TrieTree {
         System.out.println((char)(25105));
         System.out.println('我'-0);
     }
+
+//    @Test
+//    public void printCode(){
+//        for (int i = 57000; i < 77000; i++) {
+//            if (i % 10 == 0)
+//                System.out.println(i + "_" + (char) i + " ");
+//            else
+//                System.out.print(i + "_" + (char) i + " ");
+//        }
+//    }
 }
