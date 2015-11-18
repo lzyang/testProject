@@ -147,6 +147,7 @@ public class TrieTree {
 
         System.out.println("tree.info:" + tree.info());
 
-        System.out.println((char)('a'+1));
+        System.out.println((char)(25105));
+        System.out.println('我'-0);
     }
 }
