@@ -183,13 +183,9 @@ public class TrieTree {
         System.out.println('我'-0);
     }
 
-//    @Test
-//    public void printCode(){
-//        for (int i = 57000; i < 77000; i++) {
-//            if (i % 10 == 0)
-//                System.out.println(i + "_" + (char) i + " ");
-//            else
-//                System.out.print(i + "_" + (char) i + " ");
-//        }
-//    }
+    @Test
+    public void printCode(){
+        System.out.println('一'-0);
+        System.out.println(new Character('一').charValue());
+    }
 }
