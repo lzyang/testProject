@@ -23,7 +23,6 @@ import org.elasticsearch.search.aggregations.metrics.max.Max;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
-import org.nlpcn.commons.lang.util.StringUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
