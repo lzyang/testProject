@@ -26,7 +26,6 @@ public class CallableTest {
 		List<Future<String>> tasks = new ArrayList<Future<String>>();
 		for(int i=0;i<10;i++){
 			Callable<String> call = new Callable<String>(){
-				@Override
 				public String call() throws Exception {
 					System.out.println("start new Thread name:" + Thread.currentThread().getName());
 					Thread.sleep(new Random().nextInt(10000));
