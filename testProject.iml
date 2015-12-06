@@ -10,7 +10,7 @@
       <excludeFolder url="file://$MODULE_DIR$/libs" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="beanstalk" level="project" />
     <orderEntry type="library" name="hawtjni-runtime-1.9" level="project" />
@@ -60,6 +60,6 @@
     <orderEntry type="library" name="Maven: com.typesafe.akka:akka-actor_2.11:2.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.11.7" level="project" />
     <orderEntry type="library" name="Maven: com.typesafe:config:1.3.0" level="project" />
-    <orderEntry type="library" name="nlp-lang-1.0.2" level="project" />
+    <orderEntry type="library" name="nlp-lang-1.0" level="project" />
   </component>
 </module>
