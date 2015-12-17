@@ -5,6 +5,14 @@ import java.util.*;
 
 /**
  * Created by Morningsun(515190653@qq.com) on 15-11-18.
+ *
+ * 一举
+ 一举一动
+ 一举成名
+ 一举成名天下知
+ 万能
+ 万能胶
+ *
  */
 public class DoubleArrayTrieTest {
     public static void main(String[] args) throws Exception {
