@@ -37,9 +37,15 @@ public class DoubleArrayTrie {
 
     private static class Node {
         int code;
+        char c;
         int depth;
         int left;
         int right;
+
+        @Override
+        public String toString() {
+            return "{"+c+","+code+","+depth+","+left+","+right+"}";
+        }
     }
 
     private int check[];
@@ -67,12 +73,12 @@ public class DoubleArrayTrie {
         if (allocSize > 0) {
             System.arraycopy(base, 0, base2, 0, allocSize);
             System.arraycopy(check, 0, check2, 0, allocSize);
-            System.arraycopy(used2, 0, used2, 0, allocSize);
+            System.arraycopy(used2, 0, used2, 0, allocSize);  //？？？TODO del
         }
 
         base = base2;
         check = check2;
-        used = used2;
+        used = used2;  //???TODO del
 
         return allocSize = newSize;
     }
@@ -83,13 +89,13 @@ public class DoubleArrayTrie {
 
         int prev = 0;
 
-        for (int i = parent.left; i < parent.right; i++) {
-            if ((length != null ? length[i] : key.get(i).length()) < parent.depth)
+        for (int i = parent.left; i < parent.right; i++) {  //left = 0,right=key.size
+            if ((length != null ? length[i] : key.get(i).length()) < parent.depth)  //如果不是初始第一次进入，return
                 continue;
 
             String tmp = key.get(i);
 
-            int cur = 0;
+            int cur = 0;  //tmp code + 1
             if ((length != null ? length[i] : tmp.length()) != parent.depth)
                 cur = (int) tmp.charAt(parent.depth) + 1;
 
@@ -102,6 +108,7 @@ public class DoubleArrayTrie {
                 Node tmp_node = new Node();
                 tmp_node.depth = parent.depth + 1;
                 tmp_node.code = cur;
+                tmp_node.c = (char)(cur-1);
                 tmp_node.left = i;
                 if (siblings.size() != 0)
                     siblings.get(siblings.size() - 1).right = i;
@@ -115,6 +122,7 @@ public class DoubleArrayTrie {
         if (siblings.size() != 0)
             siblings.get(siblings.size() - 1).right = parent.right;
 
+        System.out.println(">>>>>>>>>>>>>>"+siblings);
         return siblings.size();
     }
 
@@ -252,10 +260,23 @@ public class DoubleArrayTrie {
         return result;
     }
 
+    /**
+     * 构建双数组
+     * @param key  有序词条列表
+     * @return
+     */
     public int build(List<String> key) {
         return build(key, null, null, key.size());
     }
 
+    /**
+     * 构建双数组
+     * @param _key   列表集合
+     * @param _length
+     * @param _value
+     * @param _keySize  列表大小
+     * @return
+     */
     public int build(List<String> _key, int _length[], int _value[],
                      int _keySize) {
         if (_keySize > _key.size() || _key == null)
@@ -279,7 +300,9 @@ public class DoubleArrayTrie {
         root_node.depth = 0;
 
         List<Node> siblings = new ArrayList<Node>();
-        fetch(root_node, siblings);
+        fetch(root_node, siblings);  //构造
+
+        System.out.println("==============================================");
         insert(siblings);
 
         // size += (1 << 8 * 2) + 1; // ???

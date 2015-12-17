@@ -10,8 +10,8 @@ public class DoubleArrayTrieTest {
     public static void main(String[] args) throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader("/server/dev/data/trieData/small.dic"));
         String line;
-        List<String> words = new ArrayList<String>();
-        Set<Character> charset = new HashSet<Character>();
+        List<String> words = new ArrayList<String>();  //词条列表
+        Set<Character> charset = new HashSet<Character>();  //所有词条的字符集合
         while ((line = reader.readLine()) != null) {
             words.add(line);
             // 制作一份码表debug
@@ -34,7 +34,7 @@ public class DoubleArrayTrieTest {
             String infoCharsetValue = "";
             String infoCharsetCode = "";
             for (Character c : charset) {
-                infoCharsetValue += c.charValue() + "    ";
+                infoCharsetValue += c.charValue() + "     ";
                 infoCharsetCode += (int) c.charValue() + " ";
             }
             infoCharsetValue += '\n';
