@@ -53,8 +53,9 @@ public class DoubleArrayTrieTest {
 
         DoubleArrayTrie dat = new DoubleArrayTrie();
         System.out.println("是否错误: " + dat.build(words));
-        System.out.println(dat);
-        List<Integer> integerList = dat.commonPrefixSearch("一举成名天下知");
+        dat.dump();
+        List<Integer> integerList = dat.commonPrefixSearch("一");
+        dat.exactMatchSearch("一");
         for (int index : integerList) {
             System.out.println(words.get(index));
         }

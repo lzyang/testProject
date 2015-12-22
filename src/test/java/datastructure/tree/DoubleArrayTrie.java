@@ -52,13 +52,13 @@ public class DoubleArrayTrie {
     private int base[];
 
     private boolean used[];
-    private int size;
+    private int size;   //数组所占空间大小
     private int allocSize;
     private List<String> key;
     private int keySize;
     private int length[];
     private int value[];
-    private int progress;
+    private int progress;   //处理完的词数
     private int nextCheckPos;
     // boolean no_delete_;
     int error_;
@@ -130,11 +130,12 @@ public class DoubleArrayTrie {
         if (error_ < 0)
             return 0;
 
-        int begin = 0;
-        int pos = ((siblings.get(0).code + 1 > nextCheckPos) ? siblings.get(0).code + 1
+        int begin = 0;   //每组起始位
+        //当前位置(当前组可用位置，已解决冲突)
+        int pos = ((siblings.get(0).code + 1 > nextCheckPos) ? siblings.get(0).code + 1   //字符unicode + 1
                 : nextCheckPos) - 1;
-        int nonzero_num = 0;
-        int first = 0;
+        int nonzero_num = 0;   //???冲突次数？
+        int first = 0;    //？？？标记十分是头一个字符
 
         if (allocSize <= pos)
             resize(pos + 1);
@@ -143,19 +144,19 @@ public class DoubleArrayTrie {
         while (true) {
             pos++;
 
-            if (allocSize <= pos)
+            if (allocSize <= pos)   //检测是否越界
                 resize(pos + 1);
 
-            if (check[pos] != 0) {
+            if (check[pos] != 0) {   //如果当前位被占，则位置后移
                 nonzero_num++;
                 continue;
             } else if (first == 0) {
-                nextCheckPos = pos;
+                nextCheckPos = pos;   //首字符nextcheckpos = 首字符nunicode + 1
                 first = 1;
             }
 
             begin = pos - siblings.get(0).code;
-            if (allocSize <= (begin + siblings.get(siblings.size() - 1).code)) {
+            if (allocSize <= (begin + siblings.get(siblings.size() - 1).code)) {   //控制双数组增长速度
                 // progress can be zero
                 double l = (1.05 > 1.0 * keySize / (progress + 1)) ? 1.05 : 1.0
                         * keySize / (progress + 1);
@@ -165,7 +166,7 @@ public class DoubleArrayTrie {
             if (used[begin])
                 continue;
 
-            for (int i = 1; i < siblings.size(); i++)
+            for (int i = 1; i < siblings.size(); i++)    //对于每一组siblings  寻找空闲空间check[begin + a1…an]  == 0
                 if (check[begin + siblings.get(i).code] != 0)
                     continue outer;
 
@@ -181,17 +182,17 @@ public class DoubleArrayTrie {
         if (1.0 * nonzero_num / (pos - nextCheckPos + 1) >= 0.95)
             nextCheckPos = pos;
 
-        used[begin] = true;
-        size = (size > begin + siblings.get(siblings.size() - 1).code + 1) ? size
+        used[begin] = true;   //每组begin位置
+        size = (size > begin + siblings.get(siblings.size() - 1).code + 1) ? size   //所占空间大小
                 : begin + siblings.get(siblings.size() - 1).code + 1;
 
         for (int i = 0; i < siblings.size(); i++)
-            check[begin + siblings.get(i).code] = begin;
+            check[begin + siblings.get(i).code] = begin;   //check赋值
 
         for (int i = 0; i < siblings.size(); i++) {
             List<Node> new_siblings = new ArrayList<Node>();
 
-            if (fetch(siblings.get(i), new_siblings) == 0) {
+            if (fetch(siblings.get(i), new_siblings) == 0) {   //字符到达末尾
                 base[begin + siblings.get(i).code] = (value != null) ? (-value[siblings
                         .get(i).left] - 1) : (-siblings.get(i).left - 1);
 
@@ -200,12 +201,12 @@ public class DoubleArrayTrie {
                     return 0;
                 }
 
-                progress++;
+                progress++;   //处理完的词数
                 // if (progress_func_) (*progress_func_) (progress,
                 // keySize);
             } else {
                 int h = insert(new_siblings);
-                base[begin + siblings.get(i).code] = h;
+                base[begin + siblings.get(i).code] = h;   //base赋值
             }
         }
         return begin;
@@ -300,7 +301,7 @@ public class DoubleArrayTrie {
         root_node.depth = 0;
 
         List<Node> siblings = new ArrayList<Node>();
-        fetch(root_node, siblings);  //构造
+        fetch(root_node, siblings);  //获取当前字符分支下下一个节点的字符信息以及位置
 
         System.out.println("==============================================");
         insert(siblings);
@@ -430,6 +431,7 @@ public class DoubleArrayTrie {
     // debug
     public void dump() {
         for (int i = 0; i < size; i++) {
+            if(base[i]>0||check[i]>0)
             System.err.println("i: " + i + " [" + base[i] + ", " + check[i]
                     + "]");
         }
