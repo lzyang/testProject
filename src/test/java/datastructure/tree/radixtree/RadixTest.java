@@ -27,8 +27,10 @@ public class RadixTest {
         trie.insert("xbox 360 xbox 360", "xbox 360 xbox 360");
         trie.insert("360 xbox games 360", "360 xbox games 360");
         trie.insert("xbox xbox 361", "xbox xbox 361");
+        trie.insert("xdfe","我是中国人");
+        trie.insert("xdfe","我不爱党");
 
-        ArrayList<String> items = trie.searchPrefix("360", 10);
+        ArrayList<String> items = trie.searchPrefix("xdfe", 10);
         for (int i = 0; i < items.size(); i++) {
             System.out.println(items.get(i));
         }
