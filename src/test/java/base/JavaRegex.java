@@ -22,13 +22,14 @@ public class JavaRegex {
 
     @Test
     public void simple(){
-        String regex = "d";
-        String source = "abcdefg";
+//        String regex = "d";
+        String regex = "(旗舰店|官方|授权)";
+        String source = "半岛铁盒汽车用品旗舰店";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(source);
         System.out.println(matcher.find());
         System.out.println(matcher.group());
-        System.out.println(matcher.replaceAll("sss"));
+        System.out.println(matcher.replaceAll(""));
     }
 
     @Test
