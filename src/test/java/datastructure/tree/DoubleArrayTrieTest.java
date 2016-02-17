@@ -9,7 +9,7 @@ import java.util.*;
  * Created by Morningsun(515190653@qq.com) on 15-11-18.
  *
  * 一举
- 一举成名
+ 一举一动
  一举成名
  一举成名天下知
  万能
@@ -18,8 +18,8 @@ import java.util.*;
  */
 public class DoubleArrayTrieTest {
     public static void main(String[] args) throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/sortedDelFacets.dic"));
-//        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/test.dat"));
+//        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/sortedDelFacets.dic"));
+        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/test.dat"));
         String line;
         List<String> words = new ArrayList<String>();  //词条列表
         Set<Character> charset = new HashSet<Character>();  //所有词条的字符集合
@@ -54,14 +54,16 @@ public class DoubleArrayTrieTest {
             System.out.print(infoCharsetValue);
             System.out.print(infoCharsetCode);
         }
-
+        for(String word:words){
+            System.out.println(word);
+        }
         DoubleArrayTrie dat = new DoubleArrayTrie();
         System.out.println("是否错误: " + dat.build(words));
         //dat.dump();
 
-        List<Integer> integerList = dat.commonPrefixSearch("100Y");
+        List<Integer> integerList = dat.commonPrefixSearch("一举成名天下");
         System.out.println(integerList);
-        dat.exactMatchSearch("1");
+        System.out.println(words.get(dat.exactMatchSearch("一举成名天下")));
         for (int index : integerList) {
             System.out.println(words.get(index));
         }

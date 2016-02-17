@@ -54,8 +54,8 @@ public class DoubleArrayTrie {
     private boolean used[];
     private int size;   //数组所占空间大小
     private int allocSize;
-    private List<String> key;
-    private int keySize;
+    private List<String> key;   //所有key
+    private int keySize;      //所有key的个数
     private int length[];
     private int value[];
     private int progress;   //处理完的词数
@@ -93,7 +93,7 @@ public class DoubleArrayTrie {
             if ((length != null ? length[i] : key.get(i).length()) < parent.depth)  //如果不是初始第一次进入，return
                 continue;
 
-            String tmp = key.get(i);
+            String tmp = key.get(i);  //拿出第i个词条
 
             int cur = 0;  //tmp code + 1
             if ((length != null ? length[i] : tmp.length()) != parent.depth)
@@ -111,7 +111,7 @@ public class DoubleArrayTrie {
                 tmp_node.c = (char)(cur-1);
                 tmp_node.left = i;
                 if (siblings.size() != 0)
-                    siblings.get(siblings.size() - 1).right = i;
+                    siblings.get(siblings.size() - 1).right = i;  //设置前一个sibling的节点的right属性
 
                 siblings.add(tmp_node);
             }
@@ -119,10 +119,10 @@ public class DoubleArrayTrie {
             prev = cur;
         }
 
-        if (siblings.size() != 0)
+        if (siblings.size() != 0)   //设置最后一个节点的right属性
             siblings.get(siblings.size() - 1).right = parent.right;
 
-        //System.out.println(">>>>>>>>>>>>>>"+siblings);
+        System.out.println(parent+">>>>>"+siblings);
         return siblings.size();
     }
 
@@ -130,12 +130,12 @@ public class DoubleArrayTrie {
         if (error_ < 0)
             return 0;
 
-        int begin = 0;   //每组起始位
+        int begin = 0;   //解决冲突后每组siblings存储的起始位，使得check[begin + a1…an]  == 0，也就是找到了n个空闲空间,a1…an是siblings中的n个节点对应的code。
         //当前位置(当前组可用位置，已解决冲突)
         int pos = ((siblings.get(0).code + 1 > nextCheckPos) ? siblings.get(0).code + 1   //字符unicode + 1
                 : nextCheckPos) - 1;
-        int nonzero_num = 0;   //???冲突次数？
-        int first = 0;    //？？？标记十分是头一个字符
+        int nonzero_num = 0;   //冲突次数
+        int first = 0;    //标记是否是每组siblings头一个字符
 
         if (allocSize <= pos)
             resize(pos + 1);
@@ -192,7 +192,7 @@ public class DoubleArrayTrie {
         for (int i = 0; i < siblings.size(); i++) {
             List<Node> new_siblings = new ArrayList<Node>();
 
-            if (fetch(siblings.get(i), new_siblings) == 0) {   //字符到达末尾
+            if (fetch(siblings.get(i), new_siblings) == 0) {   //字符到达末尾，base值设置为负
                 base[begin + siblings.get(i).code] = (value != null) ? (-value[siblings
                         .get(i).left] - 1) : (-siblings.get(i).left - 1);
 
@@ -206,7 +206,7 @@ public class DoubleArrayTrie {
                 // keySize);
             } else {
                 int h = insert(new_siblings);
-                base[begin + siblings.get(i).code] = h;   //base赋值
+                base[begin + siblings.get(i).code] = h;   //base赋值，子siblings的begin值
             }
         }
         return begin;
@@ -286,8 +286,8 @@ public class DoubleArrayTrie {
         // progress_func_ = progress_func;
         key = _key;
         length = _length;
-        keySize = _keySize;
         value = _value;
+        keySize = _keySize;
         progress = 0;
 
         resize(65536 * 32);
@@ -295,7 +295,7 @@ public class DoubleArrayTrie {
         base[0] = 1;
         nextCheckPos = 0;
 
-        Node root_node = new Node();
+        Node root_node = new Node();   //根结点的左右为0和keysize
         root_node.left = 0;
         root_node.right = keySize;
         root_node.depth = 0;
