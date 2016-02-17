@@ -1,5 +1,7 @@
 package datastructure.tree;
 
+import org.junit.Test;
+
 import java.io.*;
 import java.util.*;
 
@@ -16,11 +18,13 @@ import java.util.*;
  */
 public class DoubleArrayTrieTest {
     public static void main(String[] args) throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader("/server/dev/data/trieData/small.dic"));
+        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/sortedDelFacets.dic"));
+//        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/test.dat"));
         String line;
         List<String> words = new ArrayList<String>();  //词条列表
         Set<Character> charset = new HashSet<Character>();  //所有词条的字符集合
         while ((line = reader.readLine()) != null) {
+            if(line.trim().length()==0) continue;
             words.add(line);
             // 制作一份码表debug
             for (char c : line.toCharArray()) {
@@ -53,11 +57,40 @@ public class DoubleArrayTrieTest {
 
         DoubleArrayTrie dat = new DoubleArrayTrie();
         System.out.println("是否错误: " + dat.build(words));
-        dat.dump();
-        List<Integer> integerList = dat.commonPrefixSearch("一");
-        dat.exactMatchSearch("一");
+        //dat.dump();
+
+        List<Integer> integerList = dat.commonPrefixSearch("100Y");
+        System.out.println(integerList);
+        dat.exactMatchSearch("1");
         for (int index : integerList) {
             System.out.println(words.get(index));
         }
+    }
+
+    @Test
+    public void facetsFilter() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/delFacets.dat"));
+        List<String> words = new ArrayList<String>();  //词条列表
+        String line;
+        int emptyLine = 0;
+        int totalLine = 0;
+        int writeLine = 0;
+        while ((line = reader.readLine()) != null) {
+            if(line.trim().length()==0){
+                emptyLine ++;
+            }
+            totalLine ++;
+            words.add(line);
+        }
+        Collections.sort(words);
+        BufferedWriter writer = new BufferedWriter(new FileWriter("/mdata/codedata/facets/sortedDelFacets.dic", false));
+        for (String w : words)
+        {
+            writeLine++;
+            writer.write(w);
+            writer.newLine();
+        }
+        System.out.println("emptyLine:"+emptyLine+"\ttotalLine:"+totalLine+"\twriteLine:"+writeLine);
+        writer.close();
     }
 }

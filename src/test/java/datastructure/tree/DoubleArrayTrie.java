@@ -122,7 +122,7 @@ public class DoubleArrayTrie {
         if (siblings.size() != 0)
             siblings.get(siblings.size() - 1).right = parent.right;
 
-        System.out.println(">>>>>>>>>>>>>>"+siblings);
+        //System.out.println(">>>>>>>>>>>>>>"+siblings);
         return siblings.size();
     }
 
@@ -303,7 +303,7 @@ public class DoubleArrayTrie {
         List<Node> siblings = new ArrayList<Node>();
         fetch(root_node, siblings);  //获取当前字符分支下下一个节点的字符信息以及位置
 
-        System.out.println("==============================================");
+        //System.out.println("==============================================");
         insert(siblings);
 
         // size += (1 << 8 * 2) + 1; // ???
