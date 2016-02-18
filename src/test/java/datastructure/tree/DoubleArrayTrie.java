@@ -315,6 +315,11 @@ public class DoubleArrayTrie {
         return error_;
     }
 
+    /**
+     * 用保存的双数组进行初始化双数组
+     * @param fileName
+     * @throws IOException
+     */
     public void open(String fileName) throws IOException {
         File file = new File(fileName);
         size = (int) file.length() / UNIT_SIZE;
@@ -335,6 +340,11 @@ public class DoubleArrayTrie {
         }
     }
 
+    /**
+     * 保存双数组
+     * @param fileName
+     * @throws IOException
+     */
     public void save(String fileName) throws IOException {
         DataOutputStream out = null;
         try {
@@ -355,6 +365,22 @@ public class DoubleArrayTrie {
         return exactMatchSearch(key, 0, 0, 0);
     }
 
+    /**
+     * 进行精确匹配(exact match) 检索, 判断给定字符串是否为词典中的词条.
+
+     key 待检索字符串,
+     len 字符串长度,
+     node_pos 指定从 Double-Array 的哪个节点位置开始检索.
+
+     len, 和 node_pos 都可以省略, 省略的时候， len 缺省使用 LengthFunc 计算,
+     node_pos 缺省为 root 节点.
+     检索成功时， 返回 key 对应的 value 值, 失败则返回 -1.
+     * @param key
+     * @param pos
+     * @param len
+     * @param nodePos
+     * @return
+     */
     public int exactMatchSearch(String key, int pos, int len, int nodePos) {
         if (len <= 0)
             len = key.length();
@@ -388,6 +414,26 @@ public class DoubleArrayTrie {
         return commonPrefixSearch(key, 0, 0, 0);
     }
 
+    /**
+     * 执行 common prefix search. 检索给定字符串的哪些的前缀是词典中的词条
+
+     key 待检索字符串,
+     result 用于保存多个命中结果的数组,
+     result_size 数组 result 大小,
+     len 待检索字符串长度,
+     node_pos 指定从 Double-Array 的哪个节点位置开始检索.
+
+     len, 和 node_pos 都可以省略, 省略的时候， len 缺省使用 LengthFunc 计算,
+     node_pos 缺省为 root 节点.
+
+     函数返回命中的词条个数. 对于每个命中的词条， 词条对应的 value 值存依次放在 result 数组中. 如果命中的词条个数超过 result_size 的大小，
+     则 result 数组中只保存 result_size 个结果。函数的返回值为实际的命中词条个数， 可能超过 result_size 的大小。
+     * @param key
+     * @param pos
+     * @param len
+     * @param nodePos
+     * @return
+     */
     public List<Integer> commonPrefixSearch(String key, int pos, int len,
                                             int nodePos) {
         if (len <= 0)

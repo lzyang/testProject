@@ -63,7 +63,7 @@ public class DoubleArrayTrieTest {
 
         List<Integer> integerList = dat.commonPrefixSearch("一举成名天下");
         System.out.println(integerList);
-        System.out.println(words.get(dat.exactMatchSearch("一举成名天下")));
+        System.out.println(">>>>>>>>>"+words.get(dat.exactMatchSearch("一举成名")));
         for (int index : integerList) {
             System.out.println(words.get(index));
         }
