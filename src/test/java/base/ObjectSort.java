@@ -2,10 +2,7 @@ package base;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by root on 16-2-16.
@@ -128,5 +125,75 @@ public class ObjectSort {
             Cat s = catList.get(i);
             System.out.println(s.id + " " + s.nickName);
         }
+    }
+
+    //========================================================================
+
+    private class Category implements Comparable<Category>{
+
+        private String catId = "";
+        private String catName = "";
+        private int prodCount = 0;
+
+        public Category(String catId, String catName) {
+            this.catId = catId;
+            this.catName = catName;
+        }
+
+        public Category(String catId, String catName, int prodCount) {
+            this.catId = catId;
+            this.catName = catName;
+            this.prodCount = prodCount;
+        }
+
+        @Override
+        public String toString() {
+            return catId + '\t' + catName + '\t' + prodCount;
+        }
+
+        @Override
+        public int compareTo(Category o) {
+            if(this.prodCount-o.prodCount>0){
+                return -1;
+            }else if(this.prodCount - o.prodCount<0){
+                return 1;
+            }else {
+                return 0;
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            String key = catId + catName;
+            return key.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            Category catB = (Category)obj;
+            if(this.catName.equals(catB.catName)&&this.catId.equals(catB.catId)){
+                return true;
+            }else {
+                return false;
+            }
+        }
+    }
+
+    @Test
+    public void testTreeSet(){
+        Set<Category> cats = new TreeSet<Category>();
+        cats.add(new Category("cat10000070","手机",3));
+        cats.add(new Category("cat10000072","电视",32));
+        cats.add(new Category("cat10000073","电脑",2));
+        cats.add(new Category("cat10000071","挂烫机",23));
+        cats.add(new Category("cat10000074","茶叶",5));
+        cats.add(new Category("cat10000075","杯子",7));
+        System.out.println(cats);
+
+        for(Category cat :cats){
+            System.out.println(cat.toString());
+        }
+
+        System.out.println(new Category("cat2002021","32").equals(new Category("cat2002021","32")));
     }
 }
