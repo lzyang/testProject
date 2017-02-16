@@ -44,7 +44,7 @@ public class ESSearch {
     public void esBasicSearch() {
         String indexName = "order_v1";
         String indexType = "orderType";
-        String clusterName = "lzyESTest1_4";
+        String clusterName = "lzyCluster";
         Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, clusterName);
         TermQueryBuilder qb = QueryBuilders.termQuery("productTag", 1);
         try {
@@ -74,7 +74,7 @@ public class ESSearch {
     public void esIndex() {
         String indexName = "order_v1";
         String indexType = "orderType";
-        String clusterName = "lzyESTest";
+        String clusterName = "lzyCluster";
         Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, clusterName);
         try {
             XContentBuilder doc = XContentFactory.jsonBuilder()
@@ -97,7 +97,7 @@ public class ESSearch {
     public void filterTest() {
         String indexName = "product_local";
         String indexType = "productType";
-        String clusterName = "lzyESTest";
+        String clusterName = "lzyCluster";
 
         Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, clusterName);
 
@@ -153,7 +153,7 @@ public class ESSearch {
     public void testTimeout(){
         String indexName = "product_local";
         String indexType = "productType";
-        String clusterName = "lzyESTest";
+        String clusterName = "lzyCluster";
 
         Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, clusterName);
 

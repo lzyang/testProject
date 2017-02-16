@@ -20,7 +20,7 @@ import java.util.Random;
 public class ESIndex {
 
     public void indexData(BasicDBList docs){
-        Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, "lzyESTest");
+        Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, "lzyCluster");
         BulkRequestBuilder bulkReq = client.prepareBulk();
         try{
             for(int i=0;i<docs.size();i++){
@@ -48,7 +48,7 @@ public class ESIndex {
 
     @Test
     public void templateView(){
-        Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, "lzyESTest");
+        Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, "lzyCluster");
         GetIndexTemplatesResponse response = client.admin().indices().prepareGetTemplates().get();
         List<IndexTemplateMetaData> temps = response.getIndexTemplates();
         for(IndexTemplateMetaData temp : temps){
@@ -63,7 +63,7 @@ public class ESIndex {
 
     @Test
     public void templateSet(){
-        Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, "lzyESTest");
+        Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, "lzyCluster");
         try {
             client.admin().indices().preparePutTemplate("template_1")
                     .setTemplate("te*")
