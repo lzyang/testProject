@@ -1,6 +1,7 @@
 package es;
 
 import com.mongodb.*;
+import com.sysnote.utils.QueryParser;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.client.Client;
@@ -41,6 +42,9 @@ public class ProdIndex {
 
         if (sku == null) return null;
 
+        //分词
+        name = QueryParser.parse(name);
+
         XContentBuilder doc = XContentFactory.jsonBuilder()
                 .startObject()
                 .field("id", id)
@@ -53,24 +57,28 @@ public class ProdIndex {
             for (int i = 0; i < facets.size(); i++) {
                 BasicDBObject facet = (BasicDBObject) facets.get(i);
                 BasicDBObject facetsVal = (BasicDBObject) facet.get("values");
-                String facetValStr = (String) facetsVal.entrySet().iterator().next().getValue();
+                String facetValStr = "";
+                if(facetsVal!=null){
+                    facetValStr = (String) facetsVal.entrySet().iterator().next().getValue();
+                }else continue;
+
                 doc.field("f." + facet.getString("id", ""), facetValStr);
             }
         }
 
         doc.endObject();
-        System.out.println(doc.string());
+//        System.out.println(doc.string());
         return doc;
     }
 
     @Test
     public void putIndex() throws Exception {
         Client client = ESClientUtils.getTranClient("10.58.69.110", 9900, "datagate");
-
-        DBCursor cursor = getClient().find().limit(10);
+        DBCursor cursor = getClient().find();
         BulkRequestBuilder bulkReq = client.prepareBulk();
 
         //client.prepareIndex("prod_v1", "product");
+        int indexCount = 0;
         while (cursor.hasNext()) {
             BasicDBObject line = (BasicDBObject) cursor.next();
             IndexRequestBuilder requestBuilder = client.prepareIndex("prod_v1", "product", line.getString("id", ""));
@@ -79,6 +87,11 @@ public class ProdIndex {
                 requestBuilder.setSource(doc);
             } else continue;
             bulkReq.add(requestBuilder);
+            if(++indexCount%1000==0)  {
+                bulkReq.execute().actionGet();
+                bulkReq=client.prepareBulk();
+                System.out.println("indexCount No." + indexCount);
+            }
         }
 
         bulkReq.execute().actionGet();
