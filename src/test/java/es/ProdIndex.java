@@ -19,7 +19,7 @@ import java.util.Random;
 public class ProdIndex {
 
     private DBCollection getClient() throws UnknownHostException {
-        MongoClient mongoClient = new MongoClient("10.58.69.41", 27017);
+        MongoClient mongoClient = new MongoClient("127.0.0.1", 27017);
         return mongoClient.getDB("product_info").getCollection("simple_json");
     }
 
@@ -73,7 +73,7 @@ public class ProdIndex {
 
     @Test
     public void putIndex() throws Exception {
-        Client client = ESClientUtils.getTranClient("10.58.69.110", 9900, "datagate");
+        Client client = ESClientUtils.getTranClient("127.0.0.1", 9900, "datagate");
         DBCursor cursor = getClient().find();
         BulkRequestBuilder bulkReq = client.prepareBulk();
 

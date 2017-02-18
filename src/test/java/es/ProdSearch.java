@@ -33,7 +33,7 @@ public class ProdSearch {
         String indexName = "prod_v1";
         String indexType = "product";
         String clusterName = "datagate";
-        Client client = ESClientUtils.getTranClient("10.58.69.110", 9900, clusterName);
+        Client client = ESClientUtils.getTranClient("127.0.0.1", 9900, clusterName);
         TermQueryBuilder qb = QueryBuilders.termQuery("cname", "DIY创意");
         try {
 
