@@ -28,13 +28,18 @@ public class QueryParser {
         int count = 0;
         while (it.hasNext()){
             Term t = it.next();
-            if(sb.indexOf(t.getName())>0) continue;
+            String token = t.getName().trim();
+            if(sb.lastIndexOf(token)>=0||token.length()==0) continue;
             if(count++>0)
-                sb.append(t.getName()).append(" ");
+                sb.append(" ").append(token);
             else{
-                sb.append(t.getName());
+                sb.append(token);
             }
         }
         return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(parse("三星  samsung 原装 充电器 通用 三星 头 数据 线 三星 插头 三星 三星 手机 直 "));
     }
 }
