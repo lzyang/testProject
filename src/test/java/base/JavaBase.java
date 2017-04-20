@@ -28,4 +28,11 @@ public class JavaBase {
         System.out.println(this.getClass().getSimpleName());
         logger.error("122415222");
     }
+
+    @Test
+    public void testAssert(){
+        System.out.println("code start");
+        assert 1 > 2;  //   程序终止，抛出assertionError异常
+        System.out.println("code finish");
+    }
 }
