@@ -13,6 +13,8 @@ public class RunEnter {
     public static void main(String[] args) {
         Children c = new Children();
 
+        Parent.ParentInner pi1 = c.new ParentInner();
+
         Parent.ParentInner pi = (Parent.ParentInner)cMap.get("parentInner");
         pi.executor();
         pi.messageReceive();
