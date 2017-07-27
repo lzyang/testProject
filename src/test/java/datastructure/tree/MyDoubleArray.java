@@ -1,7 +1,6 @@
 package datastructure.tree;
 
 import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
 import com.sysnote.utils.MFileUtil;
 
 import java.io.BufferedReader;
@@ -137,7 +136,7 @@ public class MyDoubleArray {
         boolean isExist = false;
         int i = base;
         for(int c : set){
-            int t = base + c;  //?
+            int t = base + c;
             checkSize(t);
             if(baseindex[++i]!=0 || baseindex[t]!=0 || checkindex[t]!=base){
                 isExist = true;
@@ -256,6 +255,32 @@ public class MyDoubleArray {
         return t;
     }
 
+    public int getSearchPrefix(String query){
+        int t = query.charAt(0);
+        int base = baseindex[t];
+        if(base==0){
+            System.out.println(query + ":[" + 0 +   "]  " + query.charAt(0) + " not exist!");
+            return -1;
+        }
+        int len = query.length();
+        int pret = 0;
+        for(int i=1; i<len; i++){
+            t = base + query.charAt(i);
+            if(t>=baseindex.length){
+                System.out.println(query + " base==0");
+                return -1;
+            }
+            base = baseindex[t];
+//            System.out.println(i + "\t" + query.charAt(i) + "\t" + pret + "\t" + base + "\t" + checkindex[t]);
+            if((base==0 && i==len-1) || checkindex[t] != base || checkindex[t]==0){
+                System.out.println(query + "  > base==0");
+                return pret;
+            }
+            pret = t;
+        }
+        return t;
+    }
+
     public int  insertSuffix(String query, Set<Character> set){
         int t = getPrefix(query);
         int id = t;
@@ -295,9 +320,6 @@ public class MyDoubleArray {
                     id = getPrefix(key);
                 }else{
                     id = insertSuffix(key, prefix2NextChar.get(key));
-                }
-                if(key.equals("长裙")){
-                    System.out.println("长裙" + ":id:" + id);
                 }
                 Set<LineInfo> set = hash.get(key);
                 int invertpos = inverttable.size();
@@ -435,7 +457,7 @@ public class MyDoubleArray {
         if(query==null || query.length()==0){
             return null;
         }
-        int id = getPrefix(query);
+        int id = getSearchPrefix(query);
         if(id==-1){
             return null;
         }
@@ -463,10 +485,12 @@ public class MyDoubleArray {
         String dataFile = "/server/extendsearch/myDoubleArray/";
         MFileUtil.checkDir(dataFile);
         MyDoubleArray mda = new MyDoubleArray();
-        mda.loadCleanData("/server/extendsearch/t.data");
+        mda.loadCleanData("/server/extendsearch/clean.data");
         mda.build();
         mda.save(dataFile);
         mda.load(dataFile);
-        System.out.println(mda.search("1"));
+        System.out.println(mda.search("iphone6plus"));
+        System.out.println(mda.search("国美"));
+        System.out.println(mda.search("桌上垃圾桶"));
     }
 }
