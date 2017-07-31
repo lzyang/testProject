@@ -1,7 +1,5 @@
 package datastructure.tree.radixtree;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
@@ -19,6 +17,7 @@ public class SubMatchTrie {
     private  String datadir;
 
     private HashMap<String, Set<Node>> hsinverts = new HashMap<String, Set<Node>>();   //每个字符串字串的下一个字符，当最后一个字符时存放字符串的类型（物品词，品牌词）  如手机壳   <手机，[{4142,0}]>  <手机壳，[{4142,2}]>
+    private HashMap<String, Integer> singleChar = new HashMap<String, Integer>();  //保存单个字符的词及其类型
     private List<Set<String>> wordFromIndex = new ArrayList<Set<String>>();   //1.[[手],[苹],[三]]   2.[[手机],[苹果],[三星]]
 
     private static int cursor = 0;
@@ -214,6 +213,8 @@ public class SubMatchTrie {
         if(t>cursor){
             cursor = t+1;
         }
+
+
         String subword = "";
         int len = query.length();
         for(int i=0; i<len && i<MAXPREFIXLENGTH; ++i){
@@ -248,6 +249,10 @@ public class SubMatchTrie {
                     hsinverts.put(subword, set);
                 }
             }
+            if(i==0&&len==1){
+                singleChar.put(subword,type);
+            }
+
             if(wordFromIndex.get(i).contains(subword)){
                 continue;
             }
@@ -256,7 +261,7 @@ public class SubMatchTrie {
     }
 
     /**
-     * 插入首字符，和第二个字符
+     * 插入首字符，和第二个字符  head
      * @param query
      * @param set
      * @return
@@ -264,6 +269,9 @@ public class SubMatchTrie {
     public int insertHeader(String query, Set<Node> set){
         int t = query.charAt(0);
         int id = t;
+        if(singleChar.containsKey(query)){
+            baseindex[t] = new Node(cursor, singleChar.get(query));
+        }
         if(set==null){
             return 0;
         }
@@ -272,21 +280,6 @@ public class SubMatchTrie {
         boolean isExist = checkExist(base, set);
         if(isExist){
             resetBase(t,  set);
-        }else{
-            baseindex[t] = new Node(cursor, 0);
-            for(Node c : set){
-                int n = base + c.base;
-                if(checkindex[n]!=0 || baseindex[n]!=null||baseindex[i+1]!=null){
-                    System.out.println("reset-------------"+(char)c.base +":prefixbase:" + base + ":check:" + checkindex[n]);
-                }
-                baseindex[n] = new Node(++i, c.type);
-                checkindex[n] = base;
-            }
-
-            while(baseindex[i]!=null){
-                i++;
-            }
-            cursor = i;
         }
         return id;
     }
@@ -536,6 +529,11 @@ public class SubMatchTrie {
         if(base==0){
             return null;
         }
+
+        if(baseindex[t]!=null&&baseindex[t].type!=0){
+            mi = new MatchInfo(0, baseindex[t].type);
+        }
+
         int len = query.length();
         for(int i=1; i<len; ++i){
             t = base + query.charAt(i);
@@ -569,7 +567,6 @@ public class SubMatchTrie {
         int len = query.length();
         while(i<len){
             String subquery = query.substring(i, len);
-            System.out.print(subquery + ">>");
             MatchInfo mi = search(subquery);
             if(mi==null){
                 ++i;
@@ -598,14 +595,14 @@ public class SubMatchTrie {
         da.checkDirExits(da.datadir);
         da.initWordIndex();
 
-        da.loadDict("/mdata/code/queryparse/brandData/brand.dat", 1);  //组装中间数据
-        da.loadDict("/mdata/code/queryparse/brandData/category.dat", 2);  //组装中间数据
+//        da.loadDict("/mdata/code/queryparse/brandData/brand.dat", 1);  //组装中间数据
+//        da.loadDict("/mdata/code/queryparse/brandData/category.dat", 2);  //组装中间数据
         da.loadDict("/mdata/code/queryparse/brandData/color.dat", 3);  //组装中间数据
         da.build();
         da.save();
 
         da.load();
-        String str = "致林sfd手机黑富浅灰地玫瑰金方";
+        String str = "致紫林sfd手机黑色富浅灰色地玫瑰金方";
         List<SubMatchTrie.SegResult> seg = da.match(str.toLowerCase());
         List<String> brand = new ArrayList<String>();
         System.out.println("====================================");
