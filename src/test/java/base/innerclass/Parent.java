@@ -5,10 +5,14 @@ package base.innerclass;
  */
 abstract class Parent {
 
-    protected abstract void doExecute();
+    protected void doExecute(){
+        System.out.println("parent doExecute!!");
+    }
 
     public Parent() {
-        RunEnter.cMap.put("parentInner",new ParentInner());
+        ParentInner a =  new ParentInner();
+        RunEnter.cMap.put("parentInner",a);
+        RunEnter.cMap.put(this,a);
     }
 
     class ParentInner{

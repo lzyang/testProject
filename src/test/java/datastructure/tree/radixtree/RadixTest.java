@@ -31,6 +31,8 @@ public class RadixTest {
         trie.insert("xdfe","我不爱党");
 
         ArrayList<String> items = trie.searchPrefix("xdfe", 10);
+        System.out.println(trie.find("xdfe"));
+
         for (int i = 0; i < items.size(); i++) {
             System.out.println(items.get(i));
         }

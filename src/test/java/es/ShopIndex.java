@@ -127,7 +127,7 @@ public class ShopIndex {
                 StringBuilder btitle = new StringBuilder();
                 btitle.append(fields[1]).append(" ");
                 btitle.append(fields[6]);
-                List<Term> titleTerms = IndexAnalysis.parse(btitle.toString());
+                List<Term> titleTerms = IndexAnalysis.parse(btitle.toString()).getTerms();
                 doc.append("title",segToString(titleTerms));
 
                 docs.add(doc);
@@ -146,7 +146,7 @@ public class ShopIndex {
             StringBuilder btitle = new StringBuilder();
             btitle.append(item.get("name")).append(" ");
             btitle.append(item.get("brands"));
-            List<Term> titleTerms = IndexAnalysis.parse(btitle.toString());
+            List<Term> titleTerms = IndexAnalysis.parse(btitle.toString()).getTerms();
             item.append("title",segToString(titleTerms));
 //            List<Term> titleTerms = BaseAnalysis.parse(btitle.toString());
 //            List<Term> titleTerms = ToAnalysis.parse(btitle.toString());

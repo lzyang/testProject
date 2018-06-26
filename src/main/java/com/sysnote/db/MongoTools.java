@@ -189,6 +189,7 @@ public class MongoTools {
         try {
             mg = new Mongo(ip,port);
             db = mg.getDB(DBName);
+            db.slaveOk();
             if(db!=null){
                 conn = db.getCollection(collName);
             }
@@ -203,17 +204,17 @@ public class MongoTools {
     public static void main(String[] args){
         DBCollection conn =  MongoTools.getMongoConn("10.58.22.16", 19753, "dragon", "reserve", "gome", "totem");
         DBCollection newConn = null;
-        try {
-            MongoClient mongoClient = new MongoClient(new ServerAddress("10.58.22.16",19753),mongoClientOptions);
-            DB db = mongoClient.getDB("newdragon");
-            newConn = db.getCollection("reserve");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        if(!newConn.getStats().ok()){
-            System.out.println(newConn.getStats().ok());
-            return;
-        }
+//        try {
+//            MongoClient mongoClient = new MongoClient(new ServerAddress("10.58.22.16",19753),mongoClientOptions);
+//            DB db = mongoClient.getDB("newdragon");
+//            newConn = db.getCollection("reserve");
+//        } catch (UnknownHostException e) {
+//            e.printStackTrace();
+//        }
+//        if(!newConn.getStats().ok()){
+//            System.out.println(newConn.getStats().ok());
+//            return;
+//        }
 
         long nowtime = System.currentTimeMillis();
 

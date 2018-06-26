@@ -97,9 +97,9 @@ public class ESClientUtils {
     }
 
     public static TransportClient getTranClient(String ip,int port,String clusterName){
-        if(autoClient!=null){
-            return autoClient;
-        }
+//        if(autoClient!=null){
+//            return autoClient;
+//        }
         Settings sets = ImmutableSettings.settingsBuilder().put("cluster.name",clusterName).put("client.transport.sniff",true).build();
         autoClient = new TransportClient(sets);
         autoClient.addTransportAddress(new InetSocketTransportAddress(ip,port));

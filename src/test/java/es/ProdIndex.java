@@ -1,7 +1,8 @@
 package es;
 
 import com.mongodb.*;
-import com.sysnote.utils.QueryParser;
+import org.ansj.domain.Term;
+import org.ansj.splitWord.analysis.IndexAnalysis;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.client.Client;
@@ -11,7 +12,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.Random;
+import java.util.List;
 
 /**
  * Created by root on 17-2-16.
@@ -19,7 +20,7 @@ import java.util.Random;
 public class ProdIndex {
 
     private DBCollection getClient() throws UnknownHostException {
-        MongoClient mongoClient = new MongoClient("127.0.0.1", 27017);
+        MongoClient mongoClient = new MongoClient("10.58.69.41", 27017);
         return mongoClient.getDB("product_info").getCollection("simple_json");
     }
 
@@ -43,7 +44,10 @@ public class ProdIndex {
         if (sku == null) return null;
 
         //分词
-        name = QueryParser.parse(name);
+        List<Term> terms = IndexAnalysis.parse(name).getTerms();
+        StringBuilder sbr = new StringBuilder();
+        terms.forEach(s->sbr.append(s.getNatureStr()).append(" "));
+        name = sbr.toString();
 
         XContentBuilder doc = XContentFactory.jsonBuilder()
                 .startObject()
@@ -73,7 +77,7 @@ public class ProdIndex {
 
     @Test
     public void putIndex() throws Exception {
-        Client client = ESClientUtils.getTranClient("127.0.0.1", 9900, "datagate");
+        Client client = ESClientUtils.getTranClient("10.69.2.203", 9300, "es151-src-lzy");
         DBCursor cursor = getClient().find();
         BulkRequestBuilder bulkReq = client.prepareBulk();
 
@@ -81,7 +85,7 @@ public class ProdIndex {
         int indexCount = 0;
         while (cursor.hasNext()) {
             BasicDBObject line = (BasicDBObject) cursor.next();
-            IndexRequestBuilder requestBuilder = client.prepareIndex("prod_v1", "product", line.getString("id", ""));
+            IndexRequestBuilder requestBuilder = client.prepareIndex("prod_v2", "product", line.getString("id", ""));
             XContentBuilder doc = null;
             if ((doc = parseDoc(line)) != null) {
                 requestBuilder.setSource(doc);

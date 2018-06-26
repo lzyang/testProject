@@ -32,7 +32,7 @@ public class JavaBase {
     @Test
     public void testAssert(){
         System.out.println("code start");
-        assert 1 > 2;  //   程序终止，抛出assertionError异常
+        assert 1 > 2 : "条件错误";  //   程序终止，抛出assertionError异常
         System.out.println("code finish");
     }
 }

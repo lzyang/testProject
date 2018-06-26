@@ -16,7 +16,6 @@ import java.net.SocketTimeoutException;
 public class HttpClientTest {
 
 
-    @Test
     public String getContentByUrl(String url,int timeOut){
         String bodyStr = "";
         CloseableHttpClient client = HttpClientBuilder.create().build();
@@ -51,5 +50,11 @@ public class HttpClientTest {
             }
         }
         return bodyStr;
+    }
+
+    @Test
+    public void testHttpClient(){
+        getContentByUrl("http://localhost:8060/reqTest/ssss",1000);
+        getContentByUrl("http://localhost:8060/reqTest/ssss",1000);
     }
 }

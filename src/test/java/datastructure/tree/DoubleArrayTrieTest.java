@@ -18,8 +18,8 @@ import java.util.*;
  */
 public class DoubleArrayTrieTest {
     public static void main(String[] args) throws Exception {
-//        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/sortedDelFacets.dic"));
-        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/test.dat"));
+        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/sortedDelFacets.dic"));
+//        BufferedReader reader = new BufferedReader(new FileReader("/mdata/codedata/facets/test.dat"));
         String line;
         List<String> words = new ArrayList<String>();  //词条列表
         Set<Character> charset = new HashSet<Character>();  //所有词条的字符集合
