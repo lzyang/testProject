@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class NetIo {
 
@@ -23,10 +25,13 @@ public class NetIo {
         public void run(){
             try {
                 serverSocket = new ServerSocket(0);
+                Executor executor = Executors.newFixedThreadPool(10);
                 while (true){
                     Socket socket = serverSocket.accept();
                     RequestHandler requestHandler = new RequestHandler(socket);
-                    requestHandler.start();
+//                    requestHandler.start();
+                    //改为线程池作业
+                    executor.execute(requestHandler);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
