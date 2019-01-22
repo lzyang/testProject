@@ -1,17 +1,23 @@
 package ansj_seg;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
+import com.sysnote.utils.MFileUtil;
+import com.sysnote.utils.StringUtil;
 import org.ansj.domain.Term;
+import org.ansj.library.StopLibrary;
+import org.ansj.recognition.impl.StopRecognition;
 import org.ansj.splitWord.analysis.BaseAnalysis;
 import org.ansj.splitWord.analysis.IndexAnalysis;
 import org.ansj.splitWord.analysis.ToAnalysis;
 import org.junit.Test;
+import org.nlpcn.commons.lang.tire.library.Library;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -30,6 +36,50 @@ public class AnsjTest {
         }
 
         //System.out.println(parse);
+    }
+
+    @Test
+    public void algorithmLearn(){
+        String inputFilePath = "/mdata/code/gitworkspace/pythonLearn/python/data/1.基地三部曲1：基地.txt";
+        String outputFilePath = "/mdata/code/gitworkspace/pythonLearn/python/data/jidi.txt";
+
+        try {
+            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(outputFilePath),"UTF-8");
+            BufferedWriter wr = new BufferedWriter(writer);
+
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(inputFilePath),"UTF-8");
+            BufferedReader br = new BufferedReader(reader);
+            String line = "";
+            long lineCount = 0;
+
+            StopRecognition filter = new StopRecognition();
+            filter.insertStopNatures("u","v","r","d","p","null");//去除助词和动词
+            BasicDBList doc = new BasicDBList();
+            while ((line = br.readLine()) != null) {
+                List<Term> parse = ToAnalysis.parse(StringUtil.normalizeString(line)).recognition(filter).getTerms();
+//                BasicDBList sentences = new BasicDBList();
+                for(int i = 0;i<parse.size();i++){
+                    Term t = parse.get(i);
+//                    sentences.add(t.getName());
+                    wr.write(t.getName() + " ");
+                }
+//                doc.add(sentences);
+
+//                if(++lineCount>10) break;
+            }
+//            wr.write(doc.toString());
+            br.close();
+            reader.close();
+
+            wr.close();
+            writer.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

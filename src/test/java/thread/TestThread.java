@@ -51,4 +51,38 @@ public class TestThread {
         }
     }
 
+    @Test
+    public void parentThread(){
+        System.out.println("parentThread start!");
+        SubThread sub = new SubThread();
+        sub.start();
+        System.out.println("parentThread run!");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("parentThread done");
+        try {
+            /**
+             * 放弃当前线程执行，交给sub继续执行，当sub线程执行完后，返回当前线程执行,可加延迟参数
+             */
+            sub.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        }
+
+    private class SubThread extends Thread{
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("subthread runing");
+        }
+    }
 }

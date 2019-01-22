@@ -33,7 +33,7 @@ public class ConsumerTest {
 
         Properties props = new Properties();
 //        props.put("zk.connect", "127.0.0.1:2181");
-        props.put("bootstrap.servers", "127.0.0.1:9092");
+        props.put("bootstrap.servers", "10.115.4.144:9092,10.115.4.182:9092,10.115.4.183:9092");
         props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         props.put("key.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         props.put("batch.size",0);

@@ -198,6 +198,81 @@ public class StringUtil {
         return buder.toString();
     }
 
+    /**
+     * 去除特殊字符
+     * @param phrase
+     * @return
+     */
+    public static String normalizeString(String phrase){
+        if(isEmpty(phrase)){
+            return null;
+        }
+        String halfstr = full2Half(phrase.toLowerCase());
+        return removeSpaceEx(halfstr);
+    }
+
+    public static String removeSpaceEx(String phrase){
+        if(isEmpty(phrase)){
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        boolean prespace = true;
+        for(int i=0; i<phrase.length(); ++i){
+            char c = phrase.charAt(i);
+            if(!isNumEn(c) && !isChinese(c)){
+                c=32;
+            }
+            if(c==32){
+                if(!prespace){
+                    sb.append(c);
+                }
+                prespace = true;
+            }else{
+                sb.append(c);
+                prespace = false;
+            }
+        }
+        return sb.toString().trim();
+    }
+
+    public static boolean isNumEn(char c){
+        if(c>='0'&&c<='9' || c>='a'&&c<='z' || c==32){
+            return true;
+        }
+        return false;
+    }
+
+    // 根据Unicode编码完美的判断中文汉字和符号
+    public static boolean isChinese(char c) {
+        Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+        if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+                || ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+                || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+                || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B
+//            || ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+                || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS
+//            || ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
+                ) {
+            return true;
+        }
+        return false;
+    }
+
+    public static  String full2Half(String fullstr) {
+        if(isEmpty(fullstr)){
+            return null;
+        }
+        char[] c = fullstr.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            if (c[i] >= 65281 && c[i] <= 65374) {
+                c[i] = (char) (c[i] - 65248);
+            } else if (c[i] == 12288) {
+                c[i] = (char) 32;
+            }
+        }
+        return new String(c);
+    }
+
     public static void main(String[] args) {
         System.out.println(readSpecial("23fsdfds23^&*^%5sdfds"));
     }
