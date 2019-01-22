@@ -8,9 +8,24 @@
     <artifactId>testProject</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-<!--    <modules>
-        <module>mrtest</module>
-    </modules>-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+
+    <!--    <modules>
+            <module>mrtest</module>
+        </modules>-->
 
     <dependencies>
         <dependency>
@@ -58,7 +73,7 @@
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>1.4.2</version>
+            <version>1.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
@@ -75,7 +90,8 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.3.2</version>
+            <version>4.5.3</version>
+            <!--<version>4.3.2</version>-->
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
@@ -111,7 +127,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.8.3</version>
+            <version>1.10.3</version>
         </dependency>
 
         <dependency>
@@ -123,13 +139,25 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <version>0.8.2.0</version>
+            <version>0.10.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.belerweb</groupId>
+            <artifactId>pinyin4j</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ansj</groupId>
+            <artifactId>ansj_seg</artifactId>
+            <version>5.1.6</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.9.2</artifactId>
-            <version>0.8.1.1</version>
+            <artifactId>kafka_2.10</artifactId>
+            <version>0.10.2.2</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
