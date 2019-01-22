@@ -47,7 +47,6 @@ public class ConsumerTest {
         for(int i=0;i<5;i++){
             ProducerRecord<byte[],byte[]> pr = new ProducerRecord<byte[],byte[]>("test","1111".getBytes(),(i +".No send xxxxxxxxxxxfrom java").getBytes());
             producer.send(pr, new Callback() {
-                @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
                     if(e!=null) e.printStackTrace();
                     System.out.println("finish");
