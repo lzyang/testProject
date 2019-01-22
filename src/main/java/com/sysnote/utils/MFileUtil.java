@@ -66,4 +66,14 @@ public class MFileUtil {
         }
         return content;
     }
+
+    public static void checkDir(String dirname) {
+        try {
+            File f = new File(dirname);
+            if (!f.exists()) {
+                f.mkdir();
+            }
+        } catch (Exception e) {
+        }
+    }
 }

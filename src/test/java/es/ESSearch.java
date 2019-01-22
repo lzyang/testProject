@@ -8,10 +8,7 @@ import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
-import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -20,6 +17,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
+import org.elasticsearch.search.sort.SortOrder;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -151,16 +149,16 @@ public class ESSearch {
 
     @Test
     public void testTimeout(){
-        String indexName = "product_local";
+        String indexName = "product";
         String indexType = "productType";
-        String clusterName = "lzyCluster";
+        String clusterName = "product_mirror";
 
-        Client client = ESClientUtils.getTranClient("127.0.0.1", 9300, clusterName);
+        Client client = ESClientUtils.getTranClient("10.58.47.139", 9600, clusterName);
 
-        SearchRequestBuilder  builder= client.prepareSearch("product_local")
+        SearchRequestBuilder  builder= client.prepareSearch(indexName)
                 .setTimeout("10ms")
 //                .setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), FilterBuilders.scriptFilter("Thread.sleep(5000); return true;")));
-                .setQuery(QueryBuilders.matchAllQuery());
+                .setQuery(QueryBuilders.matchAllQuery()).setFrom(0).setSize(10);
         System.out.println(builder.toString());
         SearchResponse searchResponse = builder.execute().actionGet();
 
@@ -168,5 +166,28 @@ public class ESSearch {
         System.out.println(searchResponse.isTimedOut());
     }
 
+    @Test
+    public void testParseQuery(){
+        String indexName = "newword";
+        String indexType = "cnw";
+        String clusterName = "product_mirror";
 
+        Client client = ESClientUtils.getTranClient("10.58.47.139", 19600, clusterName);
+
+        MatchQueryBuilder mpb = new MatchQueryBuilder("title","暴风魔镜")
+                .type(MatchQueryBuilder.Type.PHRASE).slop(0);
+        System.out.println(mpb);
+        SearchRequestBuilder srb = client.prepareSearch(indexName).setTypes(indexType)
+                .setFetchSource(true).setQuery(mpb)
+                .addSort("_score", SortOrder.DESC)
+//                .addSort("skuId",SortOrder.ASC)
+                .setExplain(true);
+
+        SearchResponse sr = srb.execute().actionGet();
+        System.out.println(sr.getHits().totalHits());
+        for(SearchHit sh:sr.getHits().getHits()){
+            System.out.println(sh.getSource().toString());
+        }
+
+    }
 }

@@ -22,7 +22,7 @@ public class MongoTools {
     protected static MongoClientOptions mongoClientOptions = null;
     private static Hashtable<String, DB> mongoDBs = new Hashtable<String, DB>();
     private static Hashtable<String, MongoClient> mongoClients = new Hashtable<String, MongoClient>();
-
+    private static ConcurrentHashMap<String,DBCollection> dbs = new ConcurrentHashMap<String, DBCollection>();
 
     static {
         builder = MongoClientOptions.builder();
@@ -177,20 +177,44 @@ public class MongoTools {
         return resultList;
     }
 
-    public static void main(String[] args){
-        DBCollection conn =  MongoTools.getMongoConn("10.58.22.16", 19753, "dragon", "reserve", "gome", "totem");
-        DBCollection newConn = null;
+    public static synchronized DBCollection getConn(String ip,int port,String DBName,String collName){
+
+        Mongo mg = null;
+        DBCollection conn = null;
+        DB db = null;
+        conn = dbs.get(DBName+collName);
+        if(conn!=null&&conn.getStats().ok()){
+            return conn;
+        }
         try {
-            MongoClient mongoClient = new MongoClient(new ServerAddress("10.58.22.16",19753),mongoClientOptions);
-            DB db = mongoClient.getDB("newdragon");
-            newConn = db.getCollection("reserve");
+            mg = new Mongo(ip,port);
+            db = mg.getDB(DBName);
+            db.slaveOk();
+            if(db!=null){
+                conn = db.getCollection(collName);
+            }
+            dbs.put(DBName+collName,conn);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        if(!newConn.getStats().ok()){
-            System.out.println(newConn.getStats().ok());
-            return;
-        }
+        return conn;
+    }
+
+
+    public static void main(String[] args){
+        DBCollection conn =  MongoTools.getMongoConn("10.58.22.16", 19753, "dragon", "reserve", "gome", "totem");
+        DBCollection newConn = null;
+//        try {
+//            MongoClient mongoClient = new MongoClient(new ServerAddress("10.58.22.16",19753),mongoClientOptions);
+//            DB db = mongoClient.getDB("newdragon");
+//            newConn = db.getCollection("reserve");
+//        } catch (UnknownHostException e) {
+//            e.printStackTrace();
+//        }
+//        if(!newConn.getStats().ok()){
+//            System.out.println(newConn.getStats().ok());
+//            return;
+//        }
 
         long nowtime = System.currentTimeMillis();
 

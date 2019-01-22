@@ -11,6 +11,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by root on 15-2-6.
@@ -183,5 +185,20 @@ public class StringUtil {
             sb.append(str);
         }
         return sb.toString();
+    }
+
+    public static String readSpecial(String str) {
+        StringBuilder buder = new StringBuilder();
+        String regEx = "[A-Za-z0-9 \\u4e00-\\u9fa5]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        while (m.find()) {
+            buder.append(m.group(0));
+        }
+        return buder.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(readSpecial("23fsdfds23^&*^%5sdfds"));
     }
 }
