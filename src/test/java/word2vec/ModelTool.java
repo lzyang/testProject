@@ -21,28 +21,28 @@ public class ModelTool {
 
     public static void main(String[] args) throws IOException {
         ModelTool vec = new ModelTool();
-        vec.loadModel("/mdata/code/bigd/word2vec/mdata/model.m");
+        vec.loadModel("/Users/morningsun/data/word2vec/mhj_gensim.bin");
         Set<WordEntry> result = new TreeSet<WordEntry>();
+
+        System.out.println("One word analysis");
+        result = vec.distance("纪宁");
         Iterator iter = result.iterator();
-
-//        System.out.println("One word analysis");
-//        result = vec.distance("隔离");
-//        while (iter.hasNext()) {
-//            WordEntry word = (WordEntry) iter.next();
-//            System.out.println(word.name + " " + word.score);
-//        }
-        for(float vitem : vec.getWordVector("手机")){
-            System.out.print(vitem+" ");
-        }
-
-//        System.out.println("*******************************");
-        System.out.println("Three word analysis");
-        result = vec.analogy("支架", "手机", "三星");
-        iter = result.iterator();
         while (iter.hasNext()) {
             WordEntry word = (WordEntry) iter.next();
             System.out.println(word.name + " " + word.score);
         }
+        for(float vitem : vec.getWordVector("纪宁")){
+            System.out.print(vitem+" ");
+        }
+
+//        System.out.println("*******************************");
+//        System.out.println("Three word analysis");
+//        result = vec.analogy("纪宁", "余微", "小白");
+//        iter = result.iterator();
+//        while (iter.hasNext()) {
+//            WordEntry word = (WordEntry) iter.next();
+//            System.out.println(word.name + " " + word.score);
+//        }
     }
 
     private HashMap<String, float[]> wordMap = new HashMap<String, float[]>();
