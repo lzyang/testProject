@@ -12,7 +12,7 @@ import java.util.List;
 
 public class CRFppTest {
       @Test
-      public void CRFppData() {
+      public void CRFppTrainData() {
             String inputFilePath = "/Users/morningsun/data/source/莽荒纪_我吃西红柿_精校.txt";
             String outputFilePath = "/Users/morningsun/data/crf_pp/mhj_crf_bigram.txt";
 
@@ -54,6 +54,40 @@ public class CRFppTest {
                         }
                         System.out.println("line\t" + ++lineCount);
 //                        if(lineCount>10) break;
+                  }
+                  br.close();
+                  reader.close();
+
+                  wr.close();
+                  writer.close();
+                  System.out.println(outputFilePath);
+            } catch (UnsupportedEncodingException e) {
+                  e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                  e.printStackTrace();
+            } catch (IOException e) {
+                  e.printStackTrace();
+            }
+      }
+
+      @Test
+      public void CRFppTestData(){
+            String inputFilePath = "/Users/morningsun/data/crf_pp/testSouce.txt";
+            String outputFilePath = "/Users/morningsun/data/crf_pp/test.dat";
+            try {
+                  OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(outputFilePath, false), "UTF-8");
+                  BufferedWriter wr = new BufferedWriter(writer);
+                  InputStreamReader reader = new InputStreamReader(new FileInputStream(inputFilePath), "UTF-8");
+                  BufferedReader br = new BufferedReader(reader);
+                  String line = "";
+                  while ((line = br.readLine()) != null) {
+                        String normalLine = StringUtil.normalizeString(line);
+                        char[] words = normalLine.toCharArray();
+                              if(words.length>1) {
+                                    for (int j = 0; j < words.length; j++) {
+                                          wr.write(words[j] + "\r\n");
+                                    }
+                              }
                   }
                   br.close();
                   reader.close();
